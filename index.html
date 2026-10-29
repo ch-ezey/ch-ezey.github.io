@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cheta Ezenwoye | Full-Stack Developer</title>
+<meta name="description" content="Portfolio of Cheta Ezenwoye, a full-stack developer and UI/UX designer working with Java, Spring Boot, React, Python and Google Cloud.">
+<meta property="og:title" content="Cheta Ezenwoye | Full-Stack Developer">
+<meta property="og:description" content="Projects, experience and contact details for Cheta Ezenwoye.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#4fb0dc">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='4' y='5' width='10' height='22' rx='5' fill='%2300b5d8'/%3E%3Crect x='18' y='5' width='10' height='22' rx='5' fill='%23ff4554'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Source+Sans+3:wght@600;700&family=Press+Start+2P&display=swap">
+<style>
+@font-face { font-family: "Continuum Bold"; src: url("assets/continuum-bold.woff") format("woff"); font-weight: 400 900; font-style: normal; font-display: swap; }
+/* Layout concept: a console home menu. Wii channel grid and curved dock (day), Switch-style night theme with red/blue
+   Joy-Con accents, GameCube indigo for the save-file screen, NES-style pixel labels on tiny HUD text only.
+   Screens: Home, Channels (projects), Project, Save Data (experience), Contact. */
+:root {
+  color-scheme: light;
+  --ground: #ececec;
+  --dot: #e1e3e6;
+  --card: #f7f7f8;
+  --ink: #15171c;
+  --ink-soft: #6c7078;
+  --tile: #d4d6da;
+  --tile-edge: #b4b7bd;
+  --dock: #d3d8e2;
+  --wii: #4fb0dc;
+  --wii-deep: #2f86b3;
+  --joy-red: #ff4554;
+  --joy-blue: #00b5d8;
+  --cube: #5b4fcf;
+  --select: #2fd49a;
+  --shadow: rgba(0,0,0,.28);
+  --pill: #e6ebf2;
+  --pill-ink: #8a8f98;
+  --f-body: "Poppins", system-ui, sans-serif;
+  --f-chunk: "Continuum Bold", "Continuum", "Source Sans 3", "Poppins", system-ui, sans-serif;
+  --f-pixel: "Press Start 2P", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  color-scheme: dark;
+  --ground: #1b1d22; --dot: #23262c; --card: #2a2d34; --ink: #f1f2f4; --ink-soft: #9aa0aa;
+  --tile: #34373f; --tile-edge: #4a4e58; --dock: #272a31; --wii: #3fa6d6; --wii-deep: #7cc6ea;
+  --shadow: rgba(0,0,0,.6); --pill: #2f333b; --pill-ink: #a9afba; --cube: #8f86ff;
+} }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ground: #1b1d22; --dot: #23262c; --card: #2a2d34; --ink: #f1f2f4; --ink-soft: #9aa0aa;
+  --tile: #34373f; --tile-edge: #4a4e58; --dock: #272a31; --wii: #3fa6d6; --wii-deep: #7cc6ea;
+  --shadow: rgba(0,0,0,.6); --pill: #2f333b; --pill-ink: #a9afba; --cube: #8f86ff;
+}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  margin: 0; background: var(--ground); color: var(--ink); font-family: var(--f-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  overflow-x: hidden;
+}
+body::before { content: ""; position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle, var(--dot) 0 9px, transparent 10px) 0 0 / 28px 28px, var(--ground); }
+button, a { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--wii); outline-offset: 3px; }
+.app { height: 100vh; height: 100dvh; display: flex; flex-direction: column; }
+
+/* HUD */
+.hud { display: flex; align-items: center; gap: 14px; padding-block: 16px 4px; max-width: 1228px; width: 100%; margin: 0 auto; flex-wrap: wrap; }
+.player { display: flex; align-items: center; gap: 10px; font-family: var(--f-pixel); font-size: 10px; letter-spacing: .5px; text-transform: uppercase; }
+.joy { display: flex; gap: 4px; }
+.joy b { width: 12px; height: 26px; border-radius: 6px; display: block; }
+.joy b:first-child { background: var(--joy-blue); } .joy b:last-child { background: var(--joy-red); }
+.hud-r { margin-left: auto; display: flex; align-items: center; gap: 18px; }
+.hud button { display: inline-flex; align-items: center; gap: 7px; }
+.clock { text-align: right; font-family: var(--f-chunk); font-weight: 600; line-height: 1.05; }
+.clock strong { font-size: 30px; display: block; letter-spacing: 1px; font-variant-numeric: tabular-nums; }
+.clock span { font-size: 13px; color: var(--ink-soft); }
+.hud button { border: 2px solid var(--wii); background: var(--pill); border-radius: 999px; padding: 6px 14px; font: 700 14px var(--f-chunk); cursor: pointer; transition: transform .12s; }
+.hud button:hover { transform: scale(1.07); }
+
+/* Stage / screens */
+.stage { display: flex; flex-direction: column; flex: 1; min-height: 0; width: 100%; overflow-y: auto; overflow-x: hidden; padding-block: 18px 30px; scrollbar-gutter: stable both-edges; }
+.screen { display: none; width: 100%; max-width: 1228px; margin: auto; }
+.screen.on { display: block; animation: rise .32s ease-out both; }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .screen.on { animation: none; } * { transition: none !important; } }
+.tag { font-family: var(--f-pixel); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 10px; }
+h2.title { font: 700 clamp(26px, 3.6vw, 40px)/1.1 var(--f-chunk); margin: 0 0 14px; text-wrap: balance; }
+
+/* Pager */
+.pager { position: fixed; right: max(10px, env(safe-area-inset-right, 0px)); top: 36%; width: 20px; display: flex; flex-direction: column; align-items: center; gap: 20px; z-index: 6; }
+.pager button { all: unset; cursor: pointer; width: 10px; height: 11px; border-radius: 4px; background: var(--ink-soft); transition: all .2s; opacity: .7; }
+.pager button:hover:not([aria-current="true"]) { background: var(--joy-blue); opacity: .55; }
+.pager button:focus-visible { outline: 2px solid var(--wii); outline-offset: 4px; }
+.pager button[aria-current="true"] { width: 15px; height: 18px; background: var(--joy-blue); box-shadow: 0 0 7px var(--joy-blue); opacity: 1; }
+
+/* Home */
+.about { background: var(--card); border-radius: 31px; padding: 40px 46px; display: flex; gap: 44px; align-items: center; filter: drop-shadow(0 4px 3px var(--shadow)); }
+.mii-slot { flex: none; width: 280px; aspect-ratio: 1; border-radius: 74px; background: #d9d9d9; display: flex; align-items: flex-end; justify-content: center; overflow: hidden; }
+.mii-slot img { height: 92%; width: auto; max-width: 100%; display: block; }
+.about h1 { margin: 0 0 12px; font: 700 clamp(36px, 5vw, 58px)/1.05 var(--f-chunk); text-wrap: balance; }
+.about h1 em { font: 700 1em var(--f-chunk); color: var(--ink-soft); font-style: normal; }
+.about p { margin: 0 0 14px; font-size: clamp(16px, 1.9vw, 24px); line-height: 1.45; max-width: 36em; }
+.about p.small { font-size: 15px; color: var(--ink-soft); margin: 0; }
+.cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+.kit { margin-top: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+.kit section { background: var(--card); border-radius: 22px; padding: 18px 20px; border: 3px solid var(--tile); }
+.kit h3 { margin: 0 0 10px; font-size: 13px; font-family: var(--f-pixel); font-weight: 400; letter-spacing: .5px; line-height: 1.5; text-transform: uppercase; color: var(--ink-soft); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.chips li { background: var(--pill); border: 2px solid var(--tile-edge); border-radius: 999px; padding: 3px 12px; font-size: 14px; font-weight: 500; }
+
+/* Pills / round buttons */
+.pill { display: inline-grid; place-items: center; font: 700 clamp(22px, 2.6vw, 34px)/1 var(--f-chunk); color: var(--pill-ink); background: var(--pill); border: 5px solid var(--wii); border-radius: 70px; min-width: 190px; height: 76px; padding: 0 28px; box-shadow: 0 4px 4px var(--shadow); cursor: pointer; text-decoration: none; transition: transform .12s; }
+.pill:hover { transform: scale(1.06); }
+.pill[aria-disabled="true"] { border-color: var(--tile-edge); cursor: not-allowed; opacity: .75; }
+.pill[aria-disabled="true"]:hover { transform: none; }
+.pill.red { border-color: var(--joy-red); } .pill.blue { border-color: var(--joy-blue); }
+.round { all: unset; box-sizing: border-box; cursor: pointer; width: 74px; height: 74px; border-radius: 50%; border: 4px solid var(--wii); background: var(--pill); display: grid; place-items: center; box-shadow: 0 4px 5px var(--shadow); font: 700 22px var(--f-chunk); letter-spacing: 1.5px; text-rendering: geometricPrecision; color: var(--pill-ink); text-align: center; }
+.round { transition: transform .12s; overflow: hidden; }
+.round svg { width: 54%; height: 54%; fill: currentColor; display: block; }
+.round:hover { transform: scale(1.1); }
+
+/* Channels */
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.channel { all: unset; box-sizing: border-box; cursor: default; aspect-ratio: 392/217; border-radius: 28px; background: var(--tile); border: 5px solid var(--tile-edge); box-shadow: inset 0 0 0 3px rgba(255,255,255,.28); display: flex; flex-direction: column; justify-content: space-between; padding: 16px 18px; position: relative; overflow: hidden; color: #fff; }
+.channel[data-p] { cursor: pointer; transition: transform .15s, border-color .15s; }
+.channel[data-p]:hover, .channel[data-p]:focus-visible { transform: scale(1.035); border-color: var(--wii); outline: none; }
+.channel .kind { font-family: var(--f-pixel); font-size: 9px; letter-spacing: 1px; text-transform: uppercase; opacity: .9; }
+.channel .name { font: 700 clamp(24px, 3.1vw, 40px)/1 var(--f-chunk); text-shadow: 0 2px 4px rgba(0,0,0,.4); overflow-wrap: anywhere; }
+.channel .sub { font-size: 13px; font-weight: 500; opacity: .92; }
+.channel.empty { color: var(--ink-soft); align-items: center; justify-content: center; font-size: 13px; }
+.c-rootine { background: linear-gradient(135deg, #2e8b57, #1f6b5f); }
+.c-motive { background: #1f3345; } .c-motive .name { color: #d64a35; letter-spacing: 1px; }
+.c-clothing { background: linear-gradient(135deg, #ff7a59, #ff4554); }
+.c-story { background: linear-gradient(135deg, #6a5acd, #3d2f9c); }
+.c-hospital { background: linear-gradient(135deg, #2aa4c8, #1d6f9a); }
+
+/* Project screen */
+
+/* Save data */
+.saves { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; align-items: stretch; }
+.saves .s6 { grid-column: span 6; } .saves .s3 { grid-column: span 2; }
+.save ul.cols { display: block; columns: 2; column-gap: 40px; } .save .cols li { break-inside: avoid; margin-bottom: 8px; }
+/* compact layout: used automatically when the roomier one does not fit the screen height */
+.saves.compact { grid-template-columns: repeat(3, 1fr); }
+.saves.compact .s6, .saves.compact .s3 { grid-column: span 1; } .saves.compact .wide, .saves.compact .tall { grid-row: span 2; }
+.saves.compact ul.cols { columns: 1; }
+.save { display: flex; flex-direction: column; }
+.save .chips { display: flex; margin-top: auto; padding-top: 10px; }
+.save .sub { margin: 10px 0 0; padding-top: 10px; border-top: 2px dashed var(--tile-edge); }
+.save .sub:first-of-type { margin-top: 6px; border-top: 0; padding-top: 0; }
+.save .sub h4 { margin: 0; font: 700 18px/1.3 var(--f-chunk); } .save .sub p { margin: 2px 0 0; font-size: 14px; line-height: 1.5; color: var(--ink-soft); }
+.save .sub .when { display: block; margin: 3px 0 4px; }
+.save { background: var(--card); border-radius: 26px; border: 4px solid var(--cube); padding: 15px 20px; position: relative; filter: drop-shadow(0 3px 3px var(--shadow)); }
+.save header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 16px; margin-bottom: 4px; }
+.save h3 { margin: 0; font: 700 clamp(20px, 2vw, 25px)/1.2 var(--f-chunk); }
+.save .when { font-family: var(--f-pixel); font-size: 10px; color: var(--cube); line-height: 1.6; }
+.save .role { width: 100%; font-weight: 500; color: var(--ink-soft); margin: 0 0 2px; font-size: 15px; }
+.save ul { margin: 4px 0 0; padding-left: 18px; display: grid; gap: 4px; font-size: 14px; line-height: 1.4; }
+.save .chips { margin-top: 10px; }
+
+/* Contact */
+.screen#s-contact { --gap-b: 56px; }
+.bubble { position: relative; background: var(--card); border-radius: 28px; padding: 32px 36px 28px; text-align: center; max-width: 960px; width: 100%; height: 230px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0 auto var(--gap-b); z-index: 3; filter: drop-shadow(0 2px 4px var(--shadow)); }
+.bubble::after { content: ""; position: absolute; left: 50%; top: calc(100% - 4px); width: 8px; height: calc(var(--gap-b) + 8px); margin-left: -4px; background: var(--card); }
+.bubble::before { content: ""; position: absolute; left: 50%; top: calc(100% + var(--gap-b) - 10px); width: 28px; height: 28px; margin-left: -14px; border-radius: 50%; background: var(--card); z-index: 1; }
+.copybtn { margin-top: 14px; border: 2px solid var(--wii); background: var(--pill); border-radius: 999px; padding: 6px 18px; font: 700 16px var(--f-chunk); color: var(--ink); cursor: pointer; transition: transform .12s; text-decoration: none; display: inline-block; }
+.copybtn:hover { transform: scale(1.07); }
+.copybtn[hidden] { display: none; }
+.bubble p { margin: 0 0 12px; min-height: 2.7em; display: flex; align-items: center; justify-content: center; font-size: clamp(17px, 2.4vw, 30px); line-height: 1.35; text-wrap: balance; }
+.mail { font: 500 clamp(20px, 3.4vw, 42px) var(--f-body); overflow-wrap: anywhere; user-select: all; }
+.slots { --w: clamp(100px, min(15vw, 22vh), 190px); --g: clamp(14px, 4vw, 56px); position: relative; height: calc(var(--w) + 24px); padding-top: 12px; }
+.track { position: relative; height: var(--w); }
+.slot { all: unset; box-sizing: border-box; cursor: pointer; width: var(--w); flex: none; aspect-ratio: 1; background: var(--tile); border: 5px solid var(--tile-edge); border-radius: 14px; position: relative; display: grid; place-items: center; text-align: center; font: 700 clamp(15px, 1.7vw, 20px) var(--f-chunk); text-decoration: none; }
+.slot::after { content: ""; position: absolute; inset: 14%; border: 4px solid var(--tile-edge); border-radius: 6px; opacity: .6; pointer-events: none; }
+.slot span { position: relative; z-index: 1; padding: 0 8px; }
+.slot.empty { cursor: default; opacity: .55; }
+.slot { position: absolute !important; left: 50%; top: 0; margin-left: calc(var(--w) / -2); transform: translate(calc(var(--o, 0) * (var(--w) + var(--g))), 0) scale(var(--s, 1)); transition: transform .45s cubic-bezier(.3,.8,.3,1); }
+.slot.sel { transform: translate(calc(var(--o, 0) * (var(--w) + var(--g))), -8px); z-index: 2; }
+.slot:not(.sel):not(.empty):hover, .slot:not(.sel):not(.empty):focus-visible { --s: .92; outline: none; }
+.slot.sel { --c: var(--select); --l: 30px; --t: 10px; outline: none; }
+.slot.sel::before { content: ""; position: absolute; inset: -9px; z-index: 2; pointer-events: none; filter: drop-shadow(0 0 5px var(--select));
+  background:
+    linear-gradient(var(--c),var(--c)) 0 0 / var(--l) var(--t) no-repeat, linear-gradient(var(--c),var(--c)) 0 0 / var(--t) var(--l) no-repeat,
+    linear-gradient(var(--c),var(--c)) 100% 0 / var(--l) var(--t) no-repeat, linear-gradient(var(--c),var(--c)) 100% 0 / var(--t) var(--l) no-repeat,
+    linear-gradient(var(--c),var(--c)) 0 100% / var(--l) var(--t) no-repeat, linear-gradient(var(--c),var(--c)) 0 100% / var(--t) var(--l) no-repeat,
+    linear-gradient(var(--c),var(--c)) 100% 100% / var(--l) var(--t) no-repeat, linear-gradient(var(--c),var(--c)) 100% 100% / var(--t) var(--l) no-repeat; }
+
+/* Dock */
+.dock { position: relative; flex: none; height: 120px; margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))) calc(-1 * max(16px, env(safe-area-inset-right, 0px))); }
+.dock .edge { filter: drop-shadow(0 7px 6px rgba(0,0,0,.42)); }
+.dock > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.dock .row { position: absolute; left: 0; right: 0; bottom: 12px; display: flex; justify-content: space-between; align-items: center; padding: 0 max(30px, env(safe-area-inset-left, 0px)); z-index: 2; }
+.dock .socials { display: flex; gap: 30px; }
+.dock .round { text-decoration: none; }
+
+@media (max-width: 860px) {
+  .about { flex-direction: column; text-align: center; padding: 30px 22px; gap: 24px; }
+  .mii-slot { width: min(240px, 100%); }
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .saves, .saves.compact { grid-template-columns: 1fr; } .saves .s6, .saves .s3 { grid-column: span 1; } .saves .wide, .saves .tall, .saves.compact .wide, .saves.compact .tall { grid-row: auto; } .saves ul.cols { columns: 1; } .save ul { font-size: 16px; }
+  .hud-r { margin-left: 0; width: 100%; justify-content: space-between; }
+}
+@media (max-width: 520px) {
+  .grid { grid-template-columns: 1fr; }
+  .round { width: 58px; height: 58px; font-size: 18px; }
+  .dock .socials { gap: 12px; }
+  .pill { min-width: 150px; height: 64px; }
+  .pager { top: 30%; }
+}
+.ib { transition: transform .12s; display: grid !important; place-items: center; width: 82px; height: 82px; border-radius: 50%; border: 5px solid var(--wii); background: linear-gradient(180deg,#fff,#e3e8ef 65%); box-shadow: 0 4px 5px rgba(0,0,0,.28); color: #919191; }
+.ib svg { width: 46px; height: 46px; fill: currentColor; display: block; }
+.ib:hover { transform: scale(1.1); }
+button.ib { appearance: none; border: 0; background: none; padding: 0; cursor: pointer; }
+/* Project modal: TV bezel */
+.tvbox { position: fixed; inset: 0; z-index: 20; background: rgba(5,7,10,.5); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; }
+.tvbox.on { display: flex; animation: fade .2s ease-out both; }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+.tvfit { position: relative; flex: none; filter: drop-shadow(0 12px 22px rgba(0,0,0,.4)); }
+.tv { position: absolute; left: 0; top: 0; width: 1440px; height: 869px; transform-origin: 0 0; background: linear-gradient(180deg, #37b5eb 0%, #ffffff 47.5%); overflow: hidden; color: #15171c; clip-path: path("M1376.33 52.2101C1389.63 66.1766 1398.06 84.8623 1400.14 104.998C1409.64 189.825 1415.04 327.908 1415.04 434.5C1415.04 541.092 1409.64 679.175 1400.14 764.003C1398.06 784.138 1389.63 802.823 1376.33 816.79C1363.03 830.756 1345.7 839.114 1327.38 840.4C1183.78 849.924 974.111 849.924 717.6 849.924C461.089 849.924 251.417 849.924 107.817 840.4C89.4993 839.114 72.1743 830.756 58.874 816.79C45.5737 802.823 37.1452 784.138 35.0633 764.003C25.5561 679.175 20.1601 541.254 20.1601 434.5C20.1601 327.746 25.5561 189.825 35.0633 104.998C37.1452 84.8623 45.5737 66.1766 58.874 52.2101C72.1743 38.2437 89.4993 29.8862 107.817 28.6C251.417 19.0756 461.089 19.0756 717.6 19.0756C974.111 19.0756 1183.78 19.0756 1327.38 28.6C1345.7 29.8862 1363.03 38.2437 1376.33 52.2101Z"); }
+.tv { outline: none; }
+.tv > * { position: absolute; }
+.tv .sheet { left: -5px; top: 39px; width: 1450px; height: 835px; max-width: none; }
+.tv .ttl { margin: 0; left: 1066px; top: 44px; width: 374px; white-space: nowrap; height: 72px; display: grid; place-items: center; color: #fff; font: 700 44px/1 var(--f-chunk); text-shadow: 0 1px 2px rgba(0,0,0,.25); padding: 0 56px 0 0; text-align: center; }
+.tv .ttl span { display: inline-block; }
+.tv .art { left: 108px; top: 150px; width: 636px; height: 470px; border-radius: 48px; background: #d9d9d9; box-shadow: inset 0 4px 15px rgba(0,0,0,.25); display: flex; align-items: center; justify-content: center; gap: 12px; padding: 36px 26px; }
+.tv .art img { height: auto; aspect-ratio: 200 / 392; max-height: 100%; width: calc((100% - 24px) / 3); min-width: 0; object-fit: cover; border-radius: 14px; display: block; }
+.tv .cover { width: 100%; height: 100%; border-radius: 28px; display: grid; place-items: center; align-content: center; gap: 12px; position: relative; overflow: hidden; color: #fff; text-align: center; padding: 20px; }
+.tv .cover::before { content: ""; position: absolute; inset: 0 0 50% 0; background: linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,0)); }
+.tv .cover b { font: 700 52px/1 var(--f-chunk); text-shadow: 0 2px 4px rgba(0,0,0,.4); position: relative; overflow-wrap: anywhere; }
+.tv .cover i { font: 500 20px var(--f-body); font-style: normal; position: relative; opacity: .95; }
+.tv .txt { left: 776px; top: 136px; width: 564px; height: 540px; display: flex; flex-direction: column; gap: 10px; justify-content: center; }
+.tv .txt .d { margin: 0; font: 400 21px/1.4 var(--f-body); }
+.tv .txt h3 { margin: 4px 0 0; font: 700 14px var(--f-chunk); letter-spacing: 1.4px; text-transform: uppercase; color: #1f86b8; }
+.tv .txt ul.hl { margin: 0; padding-left: 22px; display: grid; gap: 4px; font-size: 17px; line-height: 1.35; }
+.tv .txt .chips { gap: 6px; } .tv .txt .chips li { font-size: 14px; padding: 2px 11px; background: #e6ebf2; border-color: #c4cbd6; color: #15171c; }
+.tv .txt .stat { margin: 0; font-size: 15px; color: #626872; }
+.tv .foot { left: 0; top: 686px; width: 1440px; height: 183px; background: repeating-linear-gradient(180deg, #d7d7d3 0 6px, #bdbdb8 6px 8px); border-top: 2px solid #1b1b1b; }
+.tv .foot .pill { position: absolute; top: 28px; width: 428px; height: 116px; font-size: 63px; border-width: 5px; border-radius: 70px; background: linear-gradient(180deg,#fff,#e3e8ef 65%); color: #919191; }
+.tv .foot .pill.a { left: 252px; } .tv .foot .pill.b { left: 760px; }
+.tv .foot .pill.off { border-color: #b3b3b0; }
+.tv .foot .ib { position: absolute; left: 1290px; top: 46px; }
+.tv .arr { top: 322px; width: 62px; height: 140px; background: none; border: 0; padding: 0; cursor: pointer; }
+.tv .arr svg { width: 100%; height: 100%; display: block; transition: transform .12s; }
+.tv .arr:hover svg, .tv .arr:focus-visible svg { transform: scale(1.12); }
+.tv .arr.prev { left: 18px; } .tv .arr.next { right: 22px; }
+
+.tv .x { right: 56px; top: 150px; width: 56px; height: 56px; z-index: 6; }
+
+/* Modal on small screens: a plain full-screen sheet */
+.tv.m { clip-path: none; position: relative; width: 100%; height: auto; transform: none; display: flex; flex-direction: column; border-radius: 0; min-height: 100%; }
+.tv.m > * { position: static; }
+.tv.m .sheet, .tv.m .arr { display: none; }
+.tv.m .ttl { width: auto; height: auto; background: #37b5eb; font-size: 34px; padding: 22px 20px 16px; margin: 0; place-items: start; text-align: left; }
+.tv.m .art { width: auto; height: auto; margin: 16px; padding: 16px; border-radius: 34px; min-height: 220px; flex-wrap: nowrap; }
+.tv.m .art img { height: auto; width: 29%; min-width: 0; max-height: 280px; object-fit: cover; }
+.tv.m .cover { min-height: 200px; }
+.tv.m .txt { width: auto; height: auto; padding: 4px 20px 20px; overflow: visible; background: #fff; }
+.tv.m .foot { width: auto; height: auto; display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; align-items: center; padding: 18px 16px calc(18px + env(safe-area-inset-bottom, 0px)); margin-top: auto; }
+.tv.m .foot .pill { position: static; width: 210px; height: 70px; font-size: 30px; }
+.tv.m .foot .ib { position: relative; left: auto; top: auto; margin: 4px 8px; }
+.tvfit.m { width: 100%; height: 100%; overflow: auto; }
+body.locked { overflow: hidden; }
+@media (max-height: 780px) { .screen#s-contact { --gap-b: 40px; } .bubble { height: 190px; padding: 16px 30px; } .stage { padding-block: 10px 16px; } }
+@media (max-width: 860px) {
+  .cta { justify-content: center; }
+  .about .tag, .about h1, .about p { text-align: center; margin-inline: auto; }
+  .tv.m .foot { position: sticky; bottom: 0; z-index: 3; }
+  .tv.m { overflow: visible; }
+  .tv.m .txt .d { font-size: 18px; }
+  .tv.m .foot { flex-wrap: nowrap; gap: 10px; padding: 12px 12px calc(12px + env(safe-area-inset-bottom, 0px)); }
+  .tv.m .foot .pill { width: auto; flex: 1 1 0; min-width: 0; height: 56px; font-size: 21px; white-space: nowrap; padding: 0 8px; border-width: 4px; }
+  .tv.m .foot .ib { width: 56px; height: 56px; margin: 0; flex: none; border-width: 4px; }
+  .tv.m .foot .ib svg { width: 30px; height: 30px; }
+}
+@media (max-width: 520px) {
+  .hud { flex-wrap: nowrap; gap: 8px; padding-block: 12px 0; }
+  .player span:last-child { display: none; }
+  .hud button { padding: 5px 11px; font-size: 13px; }
+  .hud-r { width: auto; margin-left: auto; gap: 8px; }
+  .hud-r #theme { order: -1; }
+  .clock strong { font-size: 24px; } .clock span { font-size: 11px; }
+  .pager { position: fixed; top: auto; bottom: 32px; left: 50%; right: auto; transform: translateX(-50%); width: auto; flex-direction: row; gap: 12px; }
+  .dock .row { padding: 0 18px; }
+  .round, .ib { }
+  .round { width: 50px; height: 50px; font-size: 16px; }
+  .dock .socials { gap: 10px; }
+  .channel.empty { display: none; }
+  .about h1 { font-size: 40px; }
+  .kit { grid-template-columns: 1fr; }
+  .slots { --w: 92px; --g: 14px; }
+  .bubble { padding: 20px 18px; height: 250px; }
+  .bubble p { font-size: 17px; }
+  .mail { font-size: 22px; }
+  .stage { padding-block: 12px 16px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <nav class="pager" aria-label="Screens" id="pager"></nav>
+
+  <div class="hud">
+    <div class="player"><span class="joy" aria-hidden="true"><b></b><b></b></span><span>Player 1: Cheta</span></div>
+    <button type="button" id="sound" aria-pressed="false">Sound: off</button>
+    <div class="hud-r">
+      <button type="button" id="theme" aria-label="Switch to dark theme"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" id="theme-ic"></svg><span id="theme-t">Dark</span></button>
+      <div class="clock" aria-label="Local time"><strong id="time">--:--</strong><span id="date"></span></div>
+    </div>
+  </div>
+
+  <main class="stage" id="stage">
+    <!-- Home -->
+    <section class="screen" id="s-home" aria-label="About">
+      <div class="about">
+        <div class="mii-slot"><img src="assets/mii.png" alt="Cheta's Mii: braided hair, glasses and a blue top" width="335" height="512"></div>
+        <div>
+          <p class="tag">Now playing</p>
+          <h1>About <em>Mii</em></h1>
+          <p>I’m Cheta Ezenwoye, Full-Stack Developer and UI/UX Designer.</p>
+          <p>I’m passionate about both design and functionality, I’m always striving to push my abilities to the max and then some.</p>
+          <p class="small">BSc (Hons) Computer Science (AI), University of Kent · Java, Spring Boot, React, Python and Google Cloud.</p>
+          <div class="cta">
+            <button type="button" class="pill blue" data-go="projects">Channels</button>
+            <button type="button" class="pill red" data-go="experience">Save Data</button>
+          </div>
+        </div>
+      </div>
+      <div class="kit" id="kit"></div>
+    </section>
+
+    <!-- Channels -->
+    <section class="screen" id="s-projects" aria-label="Projects">
+      <p class="tag">Channels</p>
+      <h2 class="title">Projects</h2>
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <!-- Experience -->
+    <section class="screen" id="s-experience" aria-label="Experience">
+      <p class="tag">Save data</p>
+      <h2 class="title">Experience and education</h2>
+      <div class="saves" id="saves"></div>
+    </section>
+
+    <!-- Contact -->
+    <section class="screen" id="s-contact" aria-label="Contact">
+      <div class="bubble" aria-live="polite">
+        <p id="b-lead"></p>
+        <div class="mail" id="b-main"></div>
+        <a class="copybtn" id="b-link" target="_blank" rel="noopener"></a>
+        <button type="button" class="copybtn" id="b-copy"></button>
+      </div>
+      <div class="slots" id="slots" role="radiogroup" aria-label="Contact options"><div class="track" id="track"></div></div>
+    </section>
+  </main>
+
+  <footer class="dock">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 20 C 230 -4 380 40 720 40 C 1060 40 1210 -4 1440 20 V120 H0 Z" style="fill: var(--dock)"/>
+      <path d="M0 20 C 230 -4 380 40 720 40 C 1060 40 1210 -4 1440 20" fill="none" style="stroke: var(--wii)" stroke-width="5" class="edge"/>
+    </svg>
+    <div class="row">
+      <button type="button" class="round" data-go="home" aria-label="Back to About">Mii</button>
+      <div class="socials">
+        <a class="round" href="https://github.com/ch-ezey" target="_blank" rel="noopener" aria-label="GitHub profile"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+        <a class="round" href="https://www.linkedin.com/in/ch-ezey/" target="_blank" rel="noopener" aria-label="LinkedIn profile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<div class="tvbox" id="tvbox" aria-hidden="true">
+  <div class="tvfit" id="tvfit">
+    <div class="tv" id="tv" role="dialog" aria-modal="true" aria-labelledby="tvtitle" tabindex="-1"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  /* ---------- Content ---------- */
+  var KIT = [
+    { h: "Languages", t: ["Java", "JavaScript", "Python", "SQL"] },
+    { h: "Frameworks", t: ["Spring Boot", "Hibernate/JPA", "React", "Node.js", "React Native"] },
+    { h: "Cloud and DevOps", t: ["AWS", "Google Cloud", "Docker", "Kubernetes (learning)", "GitHub Actions", "GitLab CI"] },
+    { h: "Data", t: ["MySQL", "MongoDB", "Firebase", "BigQuery", "Redis"] },
+    { h: "Practice", t: ["REST API design", "TDD", "Agile (Scrum)", "Microservices", "Secure coding"] }
+  ];
+  var PROJECTS = [
+    { id: "rootine", cls: "c-rootine", name: "Rootine", kind: "Web app", sub: "AI-assisted routines",
+      c1: "#1f6b5f", repo: "https://github.com/ch-ezey/rootine",
+      text: "An AI-assisted routine manager. Describe the routine you want, let AI turn it into a structured draft, then manage it with full create, edit, delete and reorder controls. Includes sign-up, login and task ordering.",
+      stack: ["Java 17", "Spring Boot", "JPA", "Spring Security", "MySQL", "React", "Vite", "OpenAI API", "Docker"], note: "In progress · last pushed March 2026" },
+    { id: "motive", cls: "c-motive", name: "MOTIVE", kind: "Mobile app", sub: "Find events, build community",
+      c1: "#1f3345", repo: "https://github.com/ch-ezey/Motive", shots: 3,
+      text: "Motive is a mobile app (built with React Native) that helps users find exciting events, connect with like-minded people, and build a community around shared experiences.",
+      stack: ["React Native", "Expo", "TypeScript", "Firebase", "Android Studio"], note: "Event discovery, hosting, profiles, saved events and real-time chat" },
+    { id: "clothing-tracker", cls: "c-clothing", name: "Clothing Tracker", kind: "Python tool", sub: "Size and stock tracker",
+      c1: "#c93a4a", repo: "https://github.com/ch-ezey/clothing-tracker",
+      text: "Tracks clothing sizes and availability across retailer websites including ASOS and H&M. Scrapers fetch data on demand or on a schedule, outdated items are removed, and everything is stored in SQLite with a test mode for development.",
+      stack: ["Python", "Web scraping", "SQLite", "Scheduler"], note: "Command line tool with manual, scheduled and test modes" },
+    { id: "ai-storyteller", cls: "c-story", name: "AI Storyteller", kind: "Java game", sub: "Procedural stories",
+      c1: "#3d2f9c", repo: "https://github.com/ch-ezey/AI-Storyteller",
+      text: "A procedural storytelling game in Java. It uses OpenAI prompt engineering to generate branching narratives, with separate classes for the opening, the story path and the conclusion.",
+      stack: ["Java", "OpenAI API", "Object-oriented design"], note: "University project" },
+    { id: "hospital-system", cls: "c-hospital", name: "Hospital System", kind: "Group project", sub: "Java Swing and SQL",
+      c1: "#1d6f9a", repo: "https://github.com/ch-ezey/co559",
+      text: "A group project: a Java Swing desktop app backed by a remote SQL database. Administrators manage doctor profiles and patients book appointments, with the schema designed in MySQL Workbench.",
+      stack: ["Java", "Swing", "MySQL", "Team project"], note: "University group assignment (CO559)" }
+  ];
+  var HL = {"rootine": [["Sign-up and login secured with Spring Security", "Create, edit, delete and reorder routines and tasks", "Generates and updates routines from natural-language prompts using the OpenAI API", "Containerised with Docker; AWS deployment being explored"], "In progress, MVP stage"], "motive": [["Event search and filters by location, keywords and interests", "Create events and manage guest lists; save events for later", "Profiles, friend connections and real-time chat", "Firebase authentication and Realtime Database"], "Full-stack mobile project"], "clothing-tracker": [["Separate scrapers for ASOS, H&M and Next", "Manual and scheduled updates; removes outdated items", "SQLite storage with an in-memory test mode", "Automated tests and an alerts module"], "Command line tool"], "ai-storyteller": [["Object-oriented Java design with separate opening, story and conclusion generators", "Prompt engineering and fine-tuning with OpenAI language models", "Storyline parsing and an interactive game loop"], "University project"], "hospital-system": [["Java Swing interface with login, doctor, patient and booking screens", "Reads and writes a remote MySQL database", "Schema designed in MySQL Workbench", "Built collaboratively as a group assignment"], "University group project (CO559)"]};
+  PROJECTS.forEach(function (p) { p.hl = HL[p.id][0]; p.status = HL[p.id][1]; });
+  var SAVES = [
+    { t: "Rentokil Initial", role: "Cloud IoT and Data Engineering", when: "Recent",
+      b: ["Built and maintained real-time IoT data features on Google Cloud: Dataflow and Apache Beam pipelines, Pub/Sub, Firestore, BigQuery, Redis and Python Cloud Functions.",
+          "Added Redis-backed activity processing and a shared movement-count model that replaced duplicated device-specific logic.",
+          "Improved logging, audit outputs and deployment troubleshooting for staging and production rollouts.",
+          "Wrote regression tests across the Java and Python services, with 109 Java and 46 Python tests passing in the full suite."],
+      s: ["Google Cloud", "Dataflow / Beam", "Pub/Sub", "Firestore", "BigQuery", "Redis", "Python", "Java"] },
+    { t: "MThree Alumni Programme", role: "Full-Stack Java Developer, London", when: "Feb 2025 to Aug 2025",
+      b: ["Designed and built secure RESTful microservices with Java 17+, Spring Boot and TDD.",
+          "Worked in cross-functional Agile teams: sprint planning, reviews and stand-ups.",
+          "Maintained and scaled backend services for financial systems.",
+          "Set up CI/CD pipelines with Docker and GitLab, and took part in peer code reviews."],
+      s: ["Spring Boot", "Java 17", "Docker", "GitLab CI", "TDD"] },
+    { t: "TransPerfect", role: "Data Analyst, London", when: "Sep 2024 to Dec 2024",
+      b: ["Annotated and cleaned large datasets used to train natural language processing models.",
+          "Worked with engineers to improve data pipelines and keep data accurate across systems."],
+      s: ["NLP data", "Data quality"] }
+  ];
+  var EDU = [
+    { t: "University of Kent, Canterbury", role: "BSc (Hons) Computer Science (AI), 2:1", when: "Jul 2020 to Jul 2023", b: ["Upper Second Class Honours."], s: [] },
+    { t: "AWS Training", role: "AWS re/Start (completed) · Cloud Practitioner (in progress)", when: "Cloud",
+      b: ["Built cloud architectures on EC2, S3 and RDS, with VPC networking, security groups and CloudWatch monitoring."], s: ["EC2", "S3", "RDS", "VPC", "CloudWatch"] }
+  ];
+
+  /* ---------- Helpers ---------- */
+  function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function chips(arr) { return '<ul class="chips">' + arr.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>"; }
+
+  /* Kit (skills) */
+  var kit = document.getElementById("kit");
+  KIT.forEach(function (k) { kit.appendChild(el("section", "", "<h3>" + esc(k.h) + "</h3>" + chips(k.t))); });
+
+  /* Channel grid */
+  var grid = document.getElementById("grid");
+  PROJECTS.forEach(function (p) {
+    var b = el("button", "channel " + p.cls, '<span class="kind">' + esc(p.kind) + '</span><span class="name">' + esc(p.name) + '</span><span class="sub">' + esc(p.sub) + "</span>");
+    b.type = "button"; b.dataset.p = p.id; b.dataset.go = "project-" + p.id; b.setAttribute("aria-label", "Open " + p.name);
+    grid.appendChild(b);
+  });
+  for (var i = PROJECTS.length; i < 9; i++) grid.appendChild(el("div", "channel empty", "Empty channel"));
+
+  /* Save data */
+  var saves = document.getElementById("saves");
+  function bullets(s, cls) { return '<ul' + (cls ? ' class="' + cls + '"' : '') + '>' + s.b.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>"; }
+  function save(s, span, cls) {
+    return el("article", "save " + span + (cls ? " " + cls : ""),
+      '<header><h3>' + esc(s.t) + '</h3><span class="when">' + esc(s.when) + '</span><p class="role">' + esc(s.role) + '</p></header>' +
+      bullets(s, cls === "wide" ? "cols" : "") + (s.s.length ? chips(s.s) : ""));
+  }
+  saves.appendChild(save(SAVES[0], "s6", "wide"));
+  saves.appendChild(save(SAVES[1], "s3", "tall"));
+  saves.appendChild(save(SAVES[2], "s3"));
+  var edu = el("article", "save s3", '<header><h3>Education</h3></header>' + EDU.map(function (s) {
+    return '<div class="sub"><h4>' + esc(s.t) + '</h4><p>' + esc(s.role) + '</p><span class="when">' + esc(s.when) + '</span>' + (s.s.length ? '<p>' + esc(s.b.join(" ")) + '</p>' : "") + '</div>';
+  }).join(""));
+  saves.appendChild(edu);
+
+  var order = PROJECTS.map(function (p) { return p.id; });
+  var tvbox = document.getElementById("tvbox"), tvfit = document.getElementById("tvfit"), tv = document.getElementById("tv"), appEl = document.querySelector(".app");
+  var arrowSvg = function (flip) {
+    var g = "ag" + (flip ? 1 : 0);
+    return '<svg viewBox="0 0 50 100" aria-hidden="true"><defs><linearGradient id="' + g + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#7ec4f2"/></linearGradient></defs><path ' + (flip ? 'transform="translate(50 0) scale(-1 1)" ' : "") + 'd="M8 24Q8 8 18.5 20L39.5 44.8Q44 50 39.5 55.2L18.5 80Q8 92 8 76Z" fill="url(#' + g + ')" stroke="#2f8fe6" stroke-width="4.5" stroke-linejoin="round"/></svg>';
+  };
+  function renderModal(id) {
+    var idx = order.indexOf(id), p = PROJECTS[idx];
+    var art = p.shots
+      ? [1, 2, 3].map(function (n) { return '<img src="assets/motive-' + n + '.png" alt="' + ["Motive log in screen", "Motive event feed", "Motive edit profile screen"][n - 1] + '" width="200" height="392">'; }).join("")
+      : '<div class="cover ' + p.cls + '"><b>' + esc(p.name) + "</b><i>" + esc(p.sub) + "</i></div>";
+    tv.dataset.idx = idx;
+    tv.innerHTML =
+      '<svg class="sheet" viewBox="0 0 1450 835" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="sg" gradientUnits="userSpaceOnUse" x1="0" y1="5" x2="0" y2="830"><stop offset="0" stop-opacity="0"/><stop offset=".4" stop-opacity="0"/><stop offset=".5" stop-opacity=".4"/><stop offset=".66" stop-opacity=".4"/></linearGradient></defs><path id="sh1" fill="#fff"/><path id="sh2" fill="url(#sg)" fill-opacity=".2"/><path id="sh3" fill="none" stroke="#8D8E8F" stroke-width="6" stroke-linejoin="round"/></svg>' +
+      '<h2 class="ttl" id="tvtitle"><span>' + esc(p.name) + "</span></h2>" +
+      '<button type="button" class="arr prev" data-step="-1" aria-label="Previous project">' + arrowSvg(true) + "</button>" +
+      '<div class="art">' + art + "</div>" +
+      '<div class="txt"><p class="d">' + esc(p.text) + "</p><h3>What it does</h3><ul class=\"hl\">" + p.hl.map(function (h) { return "<li>" + esc(h) + "</li>"; }).join("") + "</ul><h3>Built with</h3>" + chips(p.stack) + '<p class="stat">' + esc(p.status) + "</p></div>" +
+      '<button type="button" class="arr next" data-step="1" aria-label="Next project">' + arrowSvg(false) + "</button>" +
+      '<div class="foot"><button type="button" class="pill a" data-go="projects">Back</button>' +
+      '<span class="pill b off" aria-disabled="true" title="No live version published yet">Live App</span>' +
+      '<a class="ib" href="' + p.repo + '" target="_blank" rel="noopener" aria-label="' + esc(p.name) + ' source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></div>';
+  }
+  function layoutTab() {
+    var t = document.getElementById("tvtitle"), sp = t && t.firstChild; if (!sp) return;
+    var w = Math.max(374, Math.min(900, sp.offsetWidth + 130));
+    var x0 = 1445 - w - 181;
+    var d = "M" + x0 + " 5H5V830H1445V76.3226H" + (x0 + 180.91) + "C" + (x0 + 155.44) + " 76.3226 " + (x0 + 140.1) + " 63.81 " + (x0 + 122.28) + " 49.27C" + (x0 + 97.55) + " 29.09 " + (x0 + 68.03) + " 5 " + x0 + " 5Z";
+    ["sh1", "sh2", "sh3"].forEach(function (i) { document.getElementById(i).setAttribute("d", d); });
+    t.style.left = (x0 + 181 - 5) + "px"; t.style.width = w + "px";
+  }
+  function fit() {
+    var mobile = window.innerWidth <= 820;
+    tv.classList.toggle("m", mobile); tvfit.classList.toggle("m", mobile);
+    if (mobile) { tvfit.style.width = tvfit.style.height = ""; tv.style.transform = ""; return; }
+    var s = Math.min(1, (window.innerWidth - 24) / 1440, (window.innerHeight - 24) / 869);
+    tvfit.style.width = 1440 * s + "px"; tvfit.style.height = 869 * s + "px"; tv.style.transform = "scale(" + s + ")";
+  }
+  var lastTile = null;
+  function openModal(id) {
+    renderModal(id); fit(); layoutTab(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutTab);
+    var was = tvbox.classList.contains("on");
+    tvbox.classList.add("on"); tvbox.setAttribute("aria-hidden", "false"); document.body.classList.add("locked"); appEl.inert = true;
+    if (!was) { lastTile = document.querySelector('[data-p="' + id + '"]'); setTimeout(function () { tv.focus({ preventScroll: true }); }, 30); }
+  }
+  function closeModal() {
+    if (!tvbox.classList.contains("on")) return;
+    tvbox.classList.remove("on"); tvbox.setAttribute("aria-hidden", "true"); document.body.classList.remove("locked"); appEl.inert = false;
+    if (lastTile) { try { lastTile.focus({ preventScroll: true }); } catch (e) {} }
+  }
+  tvbox.addEventListener("click", function (e) { if (e.target === tvbox || e.target === tvfit) go("projects"); });
+  tvbox.addEventListener("click", function (e) { if (e.target === tvbox || e.target === tvfit) go("projects"); });
+  window.addEventListener("resize", fit);
+
+  /* ---------- Routing ---------- */
+  var MAIN = { home: "s-home", projects: "s-projects", experience: "s-experience", contact: "s-contact" };
+  var PAGER = [["home", "About"], ["projects", "Projects"], ["experience", "Experience"], ["contact", "Contact"]];
+  var pager = document.getElementById("pager");
+  PAGER.forEach(function (p) { var b = el("button"); b.type = "button"; b.dataset.go = p[0]; b.setAttribute("aria-label", p[1]); pager.appendChild(b); });
+
+  function current() { var h = location.hash.slice(1); return h || "home"; }
+  function show(name) {
+    var sec, group = name, modalId = null;
+    if (name.indexOf("project-") === 0 && order.indexOf(name.slice(8)) >= 0) { modalId = name.slice(8); group = "projects"; sec = MAIN.projects; }
+    else if (MAIN[name]) { sec = MAIN[name]; }
+    else { name = "home"; sec = MAIN.home; group = "home"; }
+    document.querySelectorAll(".screen").forEach(function (x) { x.classList.toggle("on", x.id === sec); });
+    pager.querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-current", b.dataset.go === group ? "true" : "false"); });
+    if (modalId) openModal(modalId); else closeModal();
+    return name;
+  }
+  function go(name) { show(name); if (location.hash !== "#" + name) location.hash = name; document.getElementById('stage').scrollTop = 0; beep(660, .05); }
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest("[data-go]"); if (t) { go(t.dataset.go); return; }
+    var s = e.target.closest("[data-step]");
+    if (s) { var i = (+tv.dataset.idx + (+s.dataset.step) + order.length) % order.length; go("project-" + order[i]); }
+  });
+  window.addEventListener("hashchange", function () { show(current()); });
+  document.addEventListener("keydown", function (e) {
+    var cur = current();
+    if (tvbox.classList.contains("on")) {
+      if (e.key === "Escape") go("projects");
+      else if (e.key === "ArrowRight" || e.key === "ArrowLeft") { var i = (+tv.dataset.idx + (e.key === "ArrowRight" ? 1 : -1) + order.length) % order.length; go("project-" + order[i]); }
+      return;
+    }
+    var keys = PAGER.map(function (p) { return p[0]; }), k = keys.indexOf(cur);
+    if (k < 0 || e.target.closest("a,button,input")) return;
+    if (e.key === "ArrowDown") go(keys[Math.min(k + 1, keys.length - 1)]);
+    if (e.key === "ArrowUp") go(keys[Math.max(k - 1, 0)]);
+  });
+
+  /* ---------- Clock ---------- */
+  function tick() {
+    var d = new Date(), p = function (n) { return (n < 10 ? "0" : "") + n; };
+    document.getElementById("time").textContent = p(d.getHours()) + ":" + p(d.getMinutes());
+    document.getElementById("date").textContent = d.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" });
+  }
+  tick(); setInterval(tick, 20000);
+
+  /* ---------- Sound (off by default, starts only after a click) ---------- */
+  var ctx = null, soundOn = false, sbtn = document.getElementById("sound");
+  function beep(freq, dur) {
+    if (!soundOn) return;
+    try {
+      ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+      var o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = "triangle"; o.frequency.value = freq; g.gain.value = .06;
+      g.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + dur);
+      o.connect(g); g.connect(ctx.destination); o.start(); o.stop(ctx.currentTime + dur);
+    } catch (err) { /* sound unavailable */ }
+  }
+  sbtn.addEventListener("click", function () {
+    soundOn = !soundOn; sbtn.setAttribute("aria-pressed", String(soundOn)); sbtn.textContent = "Sound: " + (soundOn ? "on" : "off"); beep(880, .08);
+  });
+  grid.addEventListener("mouseover", function (e) { if (e.target.closest("[data-p]")) beep(520, .03); });
+
+  /* ---------- Contact ---------- */
+  var SLOTS = [
+    { name: "Email", lead: "If you’re interested in working together, feel free to shoot me an email:", main: "cezey01@gmail.com", copy: "Copy address" },
+    { name: "GitHub", lead: "Browse my projects and source code on GitHub:", main: "github.com/ch-ezey", href: "https://github.com/ch-ezey", act: "Open GitHub" },
+    { name: "LinkedIn", lead: "Let’s connect, or read more about my experience on LinkedIn:", main: "linkedin.com/in/ch-ezey", href: "https://www.linkedin.com/in/ch-ezey/", act: "Open LinkedIn" },
+    { name: "Empty" }, { name: "Empty" }
+  ];
+  var slotsEl = document.getElementById("slots"), track = document.getElementById("track"), bl = document.getElementById("b-lead"), bm = document.getElementById("b-main"),
+      bLink = document.getElementById("b-link"), bCopy = document.getElementById("b-copy"), sel = 0;
+  SLOTS.forEach(function (sl, i) {
+    var b = el("button", "slot" + (sl.lead ? "" : " empty"), "<span>" + esc(sl.name) + "</span>");
+    b.type = "button"; b.setAttribute("role", "radio"); if (!sl.lead) b.disabled = true;
+    b.addEventListener("click", function () { pick(i); });
+    track.appendChild(b);
+  });
+  function pick(i) {
+    var sl = SLOTS[i]; if (!sl.lead) return; sel = i;
+    Array.prototype.forEach.call(track.children, function (c, j) {
+      c.style.setProperty("--o", ((j - i + 7) % 5) - 2); c.classList.toggle("sel", j === i); c.setAttribute("aria-checked", String(j === i)); });
+    bl.textContent = sl.lead; bm.textContent = sl.main;
+    bLink.hidden = !sl.href; bCopy.hidden = !!sl.href;
+    if (sl.href) { bLink.href = sl.href; bLink.textContent = sl.act; } else { bCopy.textContent = sl.copy; }
+  }
+  bCopy.addEventListener("click", function () {
+    var text = bm.textContent;
+    function fallback() { var r = document.createRange(); r.selectNodeContents(bm); var g = getSelection(); g.removeAllRanges(); g.addRange(r); bCopy.textContent = "Press Ctrl/Cmd+C to copy"; }
+    try { navigator.clipboard.writeText(text).then(function () { bCopy.textContent = "Copied"; setTimeout(function () { bCopy.textContent = SLOTS[0].copy; }, 1800); }, fallback); } catch (err) { fallback(); }
+  });
+  slotsEl.addEventListener("keydown", function (e) {
+    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+    var n = Math.max(0, Math.min(2, sel + (e.key === "ArrowRight" ? 1 : -1))); pick(n); track.children[n].focus({ preventScroll: true }); e.stopPropagation();
+  });
+  pick(0);
+
+  /* ---------- Theme ---------- */
+  var root = document.documentElement, tbtn = document.getElementById("theme");
+  var SUN = '<circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></g>';
+  var MOON = '<path d="M20 14.5A8.5 8.5 0 019.5 4a8.5 8.5 0 1010.5 10.5z" fill="currentColor"/>';
+  function isDark() { return root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; }
+  function paintTheme() {
+    var d = isDark();
+    document.getElementById("theme-ic").innerHTML = d ? SUN : MOON;
+    document.getElementById("theme-t").textContent = d ? "Light" : "Dark";
+    tbtn.setAttribute("aria-label", "Switch to " + (d ? "light" : "dark") + " theme");
+  }
+  tbtn.addEventListener("click", function () { root.dataset.theme = isDark() ? "light" : "dark"; paintTheme(); beep(700, .06); });
+  paintTheme();
+
+  /* Experience: shrink to fit the viewport on desktop so the page never scrolls */
+  function fitSaves() {
+    var sc = document.getElementById("s-experience"), st = document.getElementById("stage"); if (!sc || !st) return;
+    var sv = document.getElementById("saves");
+    sc.style.zoom = ""; sc.style.width = ""; sc.style.maxWidth = ""; sv.classList.remove("compact");
+    if (window.innerWidth <= 860 || !sc.classList.contains("on")) return;
+    var cs = getComputedStyle(st), avail = st.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+    /* 1) roomy layout (latest role on top); 2) same layout, slightly scaled; 3) compact three-column layout, scaled if needed */
+    if (sc.offsetHeight > avail && avail / sc.offsetHeight < .84) sv.classList.add("compact");
+    if (sc.offsetHeight > avail) { var z = Math.max(.6, avail / sc.offsetHeight - .005); sc.style.zoom = z.toFixed(3); sc.style.width = (100 / z) + "%"; sc.style.maxWidth = (1180 / z) + "px"; }
+  }
+  window.addEventListener("resize", fitSaves);
+  var _show = show; show = function (n) { var r = _show(n); fitSaves(); return r; };
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitSaves);
+
+  show(current());
+})();
+</script>
+</body>
+</html>
