@@ -528,7 +528,12 @@ body.locked { overflow: hidden; }
   var pager = document.getElementById("pager");
   PAGER.forEach(function (p) { var b = el("button"); b.type = "button"; b.dataset.go = p[0]; b.setAttribute("aria-label", p[1]); pager.appendChild(b); });
 
-  function current() { var h = location.hash.slice(1); return h || "home"; }
+  /* The address bar stays at the site root: the current screen is kept in memory and in the history state,
+     so back/forward still work. A #hash typed or linked on arrival is honoured once, then removed. */
+  var route = location.hash.slice(1) || "home";
+  function current() { return route; }
+  function clean() { try { return location.pathname + location.search; } catch (e) { return ""; } }
+  try { history.replaceState({ r: route }, "", clean()); } catch (e) { /* not available in some previews */ }
   function show(name) {
     var sec, group = name, modalId = null;
     if (name.indexOf("project-") === 0 && order.indexOf(name.slice(8)) >= 0) { modalId = name.slice(8); group = "projects"; sec = MAIN.projects; }
@@ -539,13 +544,17 @@ body.locked { overflow: hidden; }
     if (modalId) openModal(modalId); else closeModal();
     return name;
   }
-  function go(name) { show(name); if (location.hash !== "#" + name) location.hash = name; document.getElementById('stage').scrollTop = 0; beep(660, .05); }
+  function go(name) {
+    if (name !== route) { route = name; try { history.pushState({ r: name }, "", clean()); } catch (e) { /* ignore */ } }
+    show(name); document.getElementById('stage').scrollTop = 0; beep(660, .05);
+  }
   document.addEventListener("click", function (e) {
     var t = e.target.closest("[data-go]"); if (t) { go(t.dataset.go); return; }
     var s = e.target.closest("[data-step]");
     if (s) { var i = (+tv.dataset.idx + (+s.dataset.step) + order.length) % order.length; go("project-" + order[i]); }
   });
-  window.addEventListener("hashchange", function () { show(current()); });
+  window.addEventListener("popstate", function (e) { route = (e.state && e.state.r) || "home"; show(route); });
+  window.addEventListener("hashchange", function () { route = location.hash.slice(1) || "home"; show(route); });
   document.addEventListener("keydown", function (e) {
     var cur = current();
     if (tvbox.classList.contains("on")) {
