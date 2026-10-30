@@ -1,0 +1,108 @@
+/* ==========================================================================
+   layout.css: the frame that is always on screen
+   --------------------------------------------------------------------------
+   The page is a column that fills the window exactly (.app):
+
+     ┌───────────────────────────────┐
+     │ .hud    name, sound, theme, clock │  fixed height
+     ├───────────────────────────────┤
+     │ .stage  the current .screen   │ ● .pager (dots on the right)
+     │         (scrolls if needed)   │ ●
+     ├───────────────────────────────┤
+     │ .dock   curved bar + buttons  │  fixed height
+     └───────────────────────────────┘
+
+   Only one .screen is visible at a time: js/router.js adds the class "on"
+   to the active one.
+   ========================================================================== */
+
+/* Full-window column. 100dvh accounts for mobile browser toolbars; 100vh is the fallback. */
+.app { height: 100vh; height: 100dvh; display: flex; flex-direction: column; }
+
+/* ---------- HUD (top bar) ---------- */
+.hud { display: flex; align-items: center; gap: 14px; padding-block: 16px 4px; max-width: 1228px; width: 100%; margin: 0 auto; flex-wrap: wrap; }
+
+/* "Player 1: Cheta" with the two Joy-Con bars */
+.player { display: flex; align-items: center; gap: 10px; font-family: var(--f-pixel); font-size: 10px; letter-spacing: .5px; text-transform: uppercase; }
+.joy { display: flex; gap: 4px; }
+.joy b { width: 12px; height: 26px; border-radius: 6px; display: block; }
+.joy b:first-child { background: var(--joy-blue); }
+.joy b:last-child { background: var(--joy-red); }
+
+/* Right-hand group: theme button and clock. margin-left: auto pushes it to the right edge. */
+.hud-r { margin-left: auto; display: flex; align-items: center; gap: 18px; }
+
+/* Sound and theme buttons */
+.hud button {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 2px solid var(--wii); background: var(--pill); border-radius: 999px;
+  padding: 6px 14px; font: 700 14px var(--f-chunk); cursor: pointer; transition: transform .12s;
+}
+.hud button:hover { transform: scale(1.07); }
+
+/* Clock (filled in by js/clock.js) */
+.clock { text-align: right; font-family: var(--f-chunk); font-weight: 600; line-height: 1.05; }
+.clock strong { font-size: 30px; display: block; letter-spacing: 1px; font-variant-numeric: tabular-nums; }
+.clock span { font-size: 13px; color: var(--ink-soft); }
+
+/* ---------- Stage (middle area) and screens ---------- */
+
+/* flex: 1 takes all the height left between the HUD and the dock. */
+.stage { display: flex; flex-direction: column; flex: 1; min-height: 0; width: 100%; overflow-y: auto; overflow-x: hidden; padding-block: 18px 30px; scrollbar-gutter: stable both-edges; }
+
+/* Screens are hidden unless they have .on. margin: auto centres them vertically in the stage. */
+.screen { display: none; width: 100%; max-width: 1228px; margin: auto; }
+.screen.on { display: block; animation: rise .32s ease-out both; }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* Visitors who ask their OS for less motion get no animations or transitions. */
+@media (prefers-reduced-motion: reduce) {
+  .screen.on { animation: none; }
+  * { transition: none !important; }
+}
+
+/* ---------- Pager (screen dots) ----------
+   One button per screen, created by js/router.js. The active one gets aria-current="true". */
+.pager { position: fixed; right: max(10px, env(safe-area-inset-right, 0px)); top: 36%; width: 20px; display: flex; flex-direction: column; align-items: center; gap: 20px; z-index: 6; }
+.pager button { all: unset; cursor: pointer; width: 10px; height: 11px; border-radius: 4px; background: var(--ink-soft); transition: all .2s; opacity: .7; }
+.pager button:hover:not([aria-current="true"]) { background: var(--joy-blue); opacity: .55; }
+.pager button:focus-visible { outline: 2px solid var(--wii); outline-offset: 4px; }
+.pager button[aria-current="true"] { width: 15px; height: 18px; background: var(--joy-blue); box-shadow: 0 0 7px var(--joy-blue); opacity: 1; }
+
+/* ---------- Dock (bottom bar) ----------
+   The curved shape is an inline <svg> stretched to fill the dock; the buttons sit on top in .row.
+   Negative side margins cancel the body's gutters so the curve runs edge to edge. */
+.dock { position: relative; flex: none; height: 120px; margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))) calc(-1 * max(16px, env(safe-area-inset-right, 0px))); }
+.dock > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.dock .edge { filter: drop-shadow(0 7px 6px rgba(0,0,0,.42)); }
+.dock .row { position: absolute; left: 0; right: 0; bottom: 12px; display: flex; justify-content: space-between; align-items: center; padding: 0 max(30px, env(safe-area-inset-left, 0px)); z-index: 2; }
+.dock .socials { display: flex; gap: 30px; }
+.dock .round { text-decoration: none; }
+
+/* ---------- Responsive ---------- */
+
+/* Tablet: theme button and clock drop to their own line. */
+@media (max-width: 860px) {
+  .hud-r { margin-left: 0; width: 100%; justify-content: space-between; }
+}
+
+/* Short windows: less padding around the stage. */
+@media (max-height: 780px) {
+  .stage { padding-block: 10px 16px; }
+}
+
+/* Phone */
+@media (max-width: 520px) {
+  .hud { flex-wrap: nowrap; gap: 8px; padding-block: 12px 0; }
+  .player span:last-child { display: none; }          /* hide "Player 1: Cheta", keep the Joy-Cons */
+  .hud button { padding: 5px 11px; font-size: 13px; }
+  .hud-r { width: auto; margin-left: auto; gap: 8px; }
+  .hud-r #theme { order: -1; }
+  .clock strong { font-size: 24px; }
+  .clock span { font-size: 11px; }
+  .stage { padding-block: 12px 16px; }
+  /* Pager becomes a horizontal row of dots above the dock. */
+  .pager { top: auto; bottom: 32px; left: 50%; right: auto; transform: translateX(-50%); width: auto; flex-direction: row; gap: 12px; }
+  .dock .row { padding: 0 18px; }
+  .dock .socials { gap: 10px; }
+}

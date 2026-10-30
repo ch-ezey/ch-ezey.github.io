@@ -1,0 +1,75 @@
+/* ==========================================================================
+   theme.css: fonts and colours
+   --------------------------------------------------------------------------
+   Every colour and font on the site is a CSS custom property (a "variable")
+   declared here and used elsewhere as var(--name). Change a value here and
+   it changes everywhere.
+
+   The palette borrows from Nintendo consoles:
+     --wii         Wii channel blue (borders, outlines, focus rings)
+     --joy-red/blue Switch Joy-Con colours (accent buttons, pager)
+     --cube        GameCube indigo (Experience / "Save data" cards)
+     --select      green selection corners (Contact slots)
+   ========================================================================== */
+
+/* Custom display font, used for headings and buttons via var(--f-chunk). */
+@font-face {
+  font-family: "Continuum Bold";
+  src: url("../assets/fonts/continuum-bold.woff") format("woff");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- Light theme (default) ---------- */
+:root {
+  color-scheme: light;
+
+  /* Surfaces */
+  --ground: #ececec;      /* page background */
+  --dot: #e1e3e6;         /* dots in the background pattern */
+  --card: #f7f7f8;        /* cards, speech bubble */
+  --tile: #d4d6da;        /* empty tiles and slots */
+  --tile-edge: #b4b7bd;   /* tile borders */
+  --dock: #d3d8e2;        /* curved bar at the bottom */
+  --pill: #e6ebf2;        /* button fill */
+  --shadow: rgba(0,0,0,.28);
+
+  /* Text */
+  --ink: #15171c;         /* main text */
+  --ink-soft: #6c7078;    /* secondary text */
+  --pill-ink: #8a8f98;    /* text on big pill buttons */
+
+  /* Accents */
+  --wii: #4fb0dc;
+  --wii-deep: #2f86b3;
+  --joy-red: #ff4554;
+  --joy-blue: #00b5d8;
+  --cube: #5b4fcf;
+  --select: #2fd49a;
+
+  /* Fonts */
+  --f-body: "Poppins", system-ui, sans-serif;                                             /* paragraphs */
+  --f-chunk: "Continuum Bold", "Continuum", "Source Sans 3", "Poppins", system-ui, sans-serif; /* headings, buttons */
+  --f-pixel: "Press Start 2P", ui-monospace, monospace;                                   /* tiny retro labels */
+}
+
+/* ---------- Dark theme ----------
+   The same overrides appear twice on purpose:
+   1. When the OS is in dark mode, unless the visitor picked light with the button.
+   2. When the visitor picked dark with the button (js/theme.js sets
+      <html data-theme="dark">), whatever the OS says. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ground: #1b1d22; --dot: #23262c; --card: #2a2d34; --ink: #f1f2f4; --ink-soft: #9aa0aa;
+    --tile: #34373f; --tile-edge: #4a4e58; --dock: #272a31; --wii: #3fa6d6; --wii-deep: #7cc6ea;
+    --shadow: rgba(0,0,0,.6); --pill: #2f333b; --pill-ink: #a9afba; --cube: #8f86ff;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ground: #1b1d22; --dot: #23262c; --card: #2a2d34; --ink: #f1f2f4; --ink-soft: #9aa0aa;
+  --tile: #34373f; --tile-edge: #4a4e58; --dock: #272a31; --wii: #3fa6d6; --wii-deep: #7cc6ea;
+  --shadow: rgba(0,0,0,.6); --pill: #2f333b; --pill-ink: #a9afba; --cube: #8f86ff;
+}

@@ -1,0 +1,58 @@
+/* ==========================================================================
+   base.css: page-wide defaults
+   --------------------------------------------------------------------------
+   Resets and styles that apply to the whole page rather than one section:
+   box sizing, the dotted background, focus rings and the small heading
+   styles that every screen shares.
+   ========================================================================== */
+
+/* Width/height include padding and border, which makes sizes predictable. */
+* { box-sizing: border-box; }
+
+html, body { min-height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--f-body);
+  /* 16px side gutters, or more on phones with a notch (safe-area insets). */
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  overflow-x: hidden;
+}
+
+/* The Wii-style dotted background. A fixed layer behind everything (z-index -1)
+   painted with a repeating radial gradient: one 9px dot per 28px square. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(circle, var(--dot) 0 9px, transparent 10px) 0 0 / 28px 28px, var(--ground);
+}
+
+/* Buttons and links don't inherit font and colour by default, so make them. */
+button, a { font: inherit; color: inherit; }
+
+/* Outline shown when moving around with the keyboard (not on mouse clicks). */
+:focus-visible { outline: 3px solid var(--wii); outline-offset: 3px; }
+
+/* ---------- Shared headings ---------- */
+
+/* Small pixel-font label above a screen title, e.g. "CHANNELS". */
+.tag {
+  font-family: var(--f-pixel);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0 0 10px;
+}
+
+/* Main title of a screen. clamp() scales it with the window, between 26px and 40px. */
+h2.title {
+  font: 700 clamp(26px, 3.6vw, 40px)/1.1 var(--f-chunk);
+  margin: 0 0 14px;
+  text-wrap: balance;
+}

@@ -1,0 +1,85 @@
+/* ==========================================================================
+   screens/contact.css: the Contact screen (#s-contact)
+   --------------------------------------------------------------------------
+   A speech bubble on top, and a carousel of square "save slots" underneath
+   (Email, GitHub, LinkedIn, ...). Picking a slot slides it to the middle and
+   changes the bubble text. The behaviour lives in js/contact.js.
+   ========================================================================== */
+
+/* --gap-b is the space between the bubble and the slots; the bubble's tail spans it. */
+#s-contact { --gap-b: 56px; }
+
+/* ---------- Speech bubble ---------- */
+.bubble {
+  position: relative; z-index: 3; width: 100%; max-width: 960px; height: 230px;
+  margin: 0 auto var(--gap-b); padding: 32px 36px 28px;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  background: var(--card); border-radius: 28px; text-align: center;
+  filter: drop-shadow(0 2px 4px var(--shadow));
+}
+/* The bubble's tail is drawn with two pseudo-elements:
+   ::after  a thin stalk running down from the bubble
+   ::before a circle at the bottom of the stalk, just above the selected slot */
+.bubble::after { content: ""; position: absolute; left: 50%; top: calc(100% - 4px); width: 8px; height: calc(var(--gap-b) + 8px); margin-left: -4px; background: var(--card); }
+.bubble::before { content: ""; position: absolute; left: 50%; top: calc(100% + var(--gap-b) - 10px); width: 28px; height: 28px; margin-left: -14px; border-radius: 50%; background: var(--card); z-index: 1; }
+
+.bubble p { margin: 0 0 12px; min-height: 2.7em; display: flex; align-items: center; justify-content: center; font-size: clamp(17px, 2.4vw, 30px); line-height: 1.35; text-wrap: balance; }
+
+/* The email address / profile URL. user-select: all selects it in one click. */
+.mail { font: 500 clamp(20px, 3.4vw, 42px) var(--f-body); overflow-wrap: anywhere; user-select: all; }
+
+/* "Copy address" button or "Open GitHub" link; js/contact.js shows one and hides the other. */
+.copybtn { margin-top: 14px; border: 2px solid var(--wii); background: var(--pill); border-radius: 999px; padding: 6px 18px; font: 700 16px var(--f-chunk); color: var(--ink); cursor: pointer; transition: transform .12s; text-decoration: none; display: inline-block; }
+.copybtn:hover { transform: scale(1.07); }
+.copybtn[hidden] { display: none; }
+
+/* ---------- Slot carousel ----------
+   --w is the slot size, --g the gap between slots.
+   Every slot is absolutely positioned in the middle of .track, then pushed
+   sideways by --o slot-widths. js/contact.js sets --o on each slot
+   (-2, -1, 0, 1, 2) so the selected one is at 0, in the centre. Changing --o
+   animates thanks to the transform transition. */
+.slots { --w: clamp(100px, min(15vw, 22vh), 190px); --g: clamp(14px, 4vw, 56px); position: relative; height: calc(var(--w) + 24px); padding-top: 12px; }
+.track { position: relative; height: var(--w); }
+
+.slot {
+  all: unset; box-sizing: border-box; cursor: pointer;
+  position: absolute; left: 50%; top: 0; margin-left: calc(var(--w) / -2);
+  width: var(--w); flex: none; aspect-ratio: 1;
+  display: grid; place-items: center; text-align: center; text-decoration: none;
+  background: var(--tile); border: 5px solid var(--tile-edge); border-radius: 14px;
+  font: 700 clamp(15px, 1.7vw, 20px) var(--f-chunk);
+  transform: translate(calc(var(--o, 0) * (var(--w) + var(--g))), 0) scale(var(--s, 1));
+  transition: transform .45s cubic-bezier(.3,.8,.3,1);
+}
+/* Inner square outline, like a memory-card slot */
+.slot::after { content: ""; position: absolute; inset: 14%; border: 4px solid var(--tile-edge); border-radius: 6px; opacity: .6; pointer-events: none; }
+.slot span { position: relative; z-index: 1; padding: 0 8px; }
+.slot.empty { cursor: default; opacity: .55; }
+
+/* Unselected slots shrink slightly on hover (--s feeds the scale() above). */
+.slot:not(.sel):not(.empty):hover, .slot:not(.sel):not(.empty):focus-visible { --s: .92; outline: none; }
+
+/* Selected slot: lifted 8px, with green corner brackets.
+   --c colour, --l bracket arm length, --t bracket thickness. */
+.slot.sel { transform: translate(calc(var(--o, 0) * (var(--w) + var(--g))), -8px); z-index: 2; --c: var(--select); --l: 30px; --t: 10px; outline: none; }
+/* The four L-shaped corners are eight small gradient rectangles (a horizontal and
+   a vertical bar per corner), painted as background layers on one pseudo-element. */
+.slot.sel::before { content: ""; position: absolute; inset: -9px; z-index: 2; pointer-events: none; filter: drop-shadow(0 0 5px var(--select));
+  background:
+    linear-gradient(var(--c),var(--c)) 0 0 / var(--l) var(--t) no-repeat, linear-gradient(var(--c),var(--c)) 0 0 / var(--t) var(--l) no-repeat,
+    linear-gradient(var(--c),var(--c)) 100% 0 / var(--l) var(--t) no-repeat, linear-gradient(var(--c),var(--c)) 100% 0 / var(--t) var(--l) no-repeat,
+    linear-gradient(var(--c),var(--c)) 0 100% / var(--l) var(--t) no-repeat, linear-gradient(var(--c),var(--c)) 0 100% / var(--t) var(--l) no-repeat,
+    linear-gradient(var(--c),var(--c)) 100% 100% / var(--l) var(--t) no-repeat, linear-gradient(var(--c),var(--c)) 100% 100% / var(--t) var(--l) no-repeat; }
+
+/* ---------- Responsive ---------- */
+@media (max-height: 780px) {
+  #s-contact { --gap-b: 40px; }
+  .bubble { height: 190px; padding: 16px 30px; }
+}
+@media (max-width: 520px) {
+  .slots { --w: 92px; --g: 14px; }
+  .bubble { padding: 20px 18px; height: 250px; }
+  .bubble p { font-size: 17px; }
+  .mail { font-size: 22px; }
+}

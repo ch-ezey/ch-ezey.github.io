@@ -1,0 +1,55 @@
+/* ==========================================================================
+   components.css: reusable pieces used on more than one screen
+   --------------------------------------------------------------------------
+   .chips  row of rounded tags (skills, tech stack)
+   .pill   big Wii-menu button ("Channels", "Save Data", "Back")
+   .round  circular dock button (Mii, GitHub, LinkedIn)
+   .ib     circular icon button with a glossy fill (GitHub link in the project modal)
+   ========================================================================== */
+
+/* ---------- Chips ---------- */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.chips li { background: var(--pill); border: 2px solid var(--tile-edge); border-radius: 999px; padding: 3px 12px; font-size: 14px; font-weight: 500; }
+
+/* ---------- Pill buttons ----------
+   Add .red or .blue to change the border colour.
+   aria-disabled="true" greys one out (used for the "Live App" button with no live version). */
+.pill {
+  display: inline-grid; place-items: center;
+  font: 700 clamp(22px, 2.6vw, 34px)/1 var(--f-chunk); color: var(--pill-ink);
+  background: var(--pill); border: 5px solid var(--wii); border-radius: 70px;
+  min-width: 190px; height: 76px; padding: 0 28px;
+  box-shadow: 0 4px 4px var(--shadow); cursor: pointer; text-decoration: none; transition: transform .12s;
+}
+.pill:hover { transform: scale(1.06); }
+.pill[aria-disabled="true"] { border-color: var(--tile-edge); cursor: not-allowed; opacity: .75; }
+.pill[aria-disabled="true"]:hover { transform: none; }
+.pill.red { border-color: var(--joy-red); }
+.pill.blue { border-color: var(--joy-blue); }
+
+/* ---------- Round buttons ----------
+   all: unset wipes the browser's default button styles before we add our own. */
+.round {
+  all: unset; box-sizing: border-box; cursor: pointer;
+  width: 74px; height: 74px; border-radius: 50%; border: 4px solid var(--wii); background: var(--pill);
+  display: grid; place-items: center; overflow: hidden; box-shadow: 0 4px 5px var(--shadow);
+  font: 700 22px var(--f-chunk); letter-spacing: 1.5px; text-rendering: geometricPrecision;
+  color: var(--pill-ink); text-align: center; transition: transform .12s;
+}
+.round svg { width: 54%; height: 54%; fill: currentColor; display: block; }
+.round:hover { transform: scale(1.1); }
+
+/* ---------- Glossy icon button ---------- */
+.ib {
+  display: grid; place-items: center; width: 82px; height: 82px; border-radius: 50%;
+  border: 5px solid var(--wii); background: linear-gradient(180deg,#fff,#e3e8ef 65%);
+  box-shadow: 0 4px 5px rgba(0,0,0,.28); color: #919191; transition: transform .12s;
+}
+.ib svg { width: 46px; height: 46px; fill: currentColor; display: block; }
+.ib:hover { transform: scale(1.1); }
+
+/* ---------- Phone ---------- */
+@media (max-width: 520px) {
+  .pill { min-width: 150px; height: 64px; }
+  .round { width: 50px; height: 50px; font-size: 16px; }
+}

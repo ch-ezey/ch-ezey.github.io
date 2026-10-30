@@ -1,0 +1,43 @@
+/* ==========================================================================
+   screens/home.css: the "About Mii" screen (#s-home)
+   --------------------------------------------------------------------------
+   .about  the big card: Mii picture on the left, intro text on the right
+   .kit    grid of skill cards underneath (filled in by js/home.js)
+   ========================================================================== */
+
+/* ---------- About card ---------- */
+.about { background: var(--card); border-radius: 31px; padding: 40px 46px; display: flex; gap: 44px; align-items: center; filter: drop-shadow(0 4px 3px var(--shadow)); }
+
+/* Rounded grey square holding the Mii image, anchored to the bottom. */
+.mii-slot { flex: none; width: 280px; aspect-ratio: 1; border-radius: 74px; background: #d9d9d9; display: flex; align-items: flex-end; justify-content: center; overflow: hidden; }
+.mii-slot img { height: 92%; width: auto; max-width: 100%; display: block; }
+
+.about h1 { margin: 0 0 12px; font: 700 clamp(36px, 5vw, 58px)/1.05 var(--f-chunk); text-wrap: balance; }
+.about h1 em { font: 700 1em var(--f-chunk); color: var(--ink-soft); font-style: normal; }   /* the grey "Mii" */
+.about p { margin: 0 0 14px; font-size: clamp(16px, 1.9vw, 24px); line-height: 1.45; max-width: 36em; }
+.about p.small { font-size: 15px; color: var(--ink-soft); margin: 0; }
+
+/* "Channels" and "Save Data" buttons */
+.cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+
+/* ---------- Skill cards ----------
+   auto-fit + minmax: as many 230px+ columns as fit, stretched to fill the row. */
+.kit { margin-top: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+.kit section { background: var(--card); border-radius: 22px; padding: 18px 20px; border: 3px solid var(--tile); }
+.kit h3 { margin: 0 0 10px; font-size: 13px; font-family: var(--f-pixel); font-weight: 400; letter-spacing: .5px; line-height: 1.5; text-transform: uppercase; color: var(--ink-soft); }
+
+/* ---------- Responsive ---------- */
+
+/* Tablet: stack the Mii above the text and centre everything. */
+@media (max-width: 860px) {
+  .about { flex-direction: column; text-align: center; padding: 30px 22px; gap: 24px; }
+  .mii-slot { width: min(240px, 100%); }
+  .cta { justify-content: center; }
+  .about .tag, .about h1, .about p { text-align: center; margin-inline: auto; }
+}
+
+/* Phone */
+@media (max-width: 520px) {
+  .about h1 { font-size: 40px; }
+  .kit { grid-template-columns: 1fr; }
+}

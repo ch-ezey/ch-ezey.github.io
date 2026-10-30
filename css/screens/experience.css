@@ -1,0 +1,63 @@
+/* ==========================================================================
+   screens/experience.css: the "Save data" screen (#s-experience)
+   --------------------------------------------------------------------------
+   GameCube memory-card style cards for jobs and education, built by
+   js/experience.js.
+
+   Desktop layout uses a 6-column grid:
+     .s6 = card spans all 6 columns (full width)
+     .s3 = card spans 2 of 6 columns (one third)
+     .wide = full-width card whose bullet list splits into two columns
+
+   If that doesn't fit the window height, js/fit.js adds .compact
+   (three equal columns) and, if still needed, zooms the screen out a bit
+   so it never has to scroll on desktop.
+   ========================================================================== */
+
+/* ---------- Grid ---------- */
+.saves { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; align-items: stretch; }
+.saves .s6 { grid-column: span 6; }
+.saves .s3 { grid-column: span 2; }
+
+/* Compact variant */
+.saves.compact { grid-template-columns: repeat(3, 1fr); }
+.saves.compact .s6, .saves.compact .s3 { grid-column: span 1; }
+.saves.compact .wide, .saves.compact .tall { grid-row: span 2; }
+
+/* ---------- Card ---------- */
+.save {
+  display: flex; flex-direction: column; position: relative;
+  background: var(--card); border-radius: 26px; border: 4px solid var(--cube); padding: 15px 20px;
+  filter: drop-shadow(0 3px 3px var(--shadow));
+}
+
+/* Title, dates and role */
+.save header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 16px; margin-bottom: 4px; }
+.save h3 { margin: 0; font: 700 clamp(20px, 2vw, 25px)/1.2 var(--f-chunk); }
+.save .when { font-family: var(--f-pixel); font-size: 10px; color: var(--cube); line-height: 1.6; }
+.save .role { width: 100%; font-weight: 500; color: var(--ink-soft); margin: 0 0 2px; font-size: 15px; }
+
+/* Bullet points */
+.save ul { margin: 4px 0 0; padding-left: 18px; display: grid; gap: 4px; font-size: 14px; line-height: 1.4; }
+.save ul.cols { display: block; columns: 2; column-gap: 40px; }
+.save .cols li { break-inside: avoid; margin-bottom: 8px; }
+.saves.compact ul.cols { columns: 1; }
+
+/* Skill chips at the bottom of a card */
+.save .chips { display: flex; margin-top: 10px; padding-top: 10px; }
+
+/* Entries inside the Education card, separated by dashed lines */
+.save .sub { margin: 10px 0 0; padding-top: 10px; border-top: 2px dashed var(--tile-edge); }
+.save .sub:first-of-type { margin-top: 6px; border-top: 0; padding-top: 0; }
+.save .sub h4 { margin: 0; font: 700 18px/1.3 var(--f-chunk); }
+.save .sub p { margin: 2px 0 0; font-size: 14px; line-height: 1.5; color: var(--ink-soft); }
+.save .sub .when { display: block; margin: 3px 0 4px; }
+
+/* ---------- Tablet and phone: one card per row ---------- */
+@media (max-width: 860px) {
+  .saves, .saves.compact { grid-template-columns: 1fr; }
+  .saves .s6, .saves .s3 { grid-column: span 1; }
+  .saves .wide, .saves .tall, .saves.compact .wide, .saves.compact .tall { grid-row: auto; }
+  .saves ul.cols { columns: 1; }
+  .save ul { font-size: 16px; }
+}

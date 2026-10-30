@@ -1,0 +1,53 @@
+/* ==========================================================================
+   screens/projects.css: the "Channels" screen (#s-projects)
+   --------------------------------------------------------------------------
+   A Wii-menu grid of channel tiles, one per project, padded out with grey
+   "Empty channel" tiles (created by js/projects.js). Clicking a tile opens
+   the project modal (see css/modal.css).
+
+   On short windows js/fit.js first hides the empty rows (.compact), then
+   zooms out if that still isn't enough.
+   ========================================================================== */
+
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+/* ---------- Tiles ----------
+   Each tile is a <button>. Real projects have a data-p attribute; empty tiles don't,
+   which is how the hover and pointer styles only apply to real ones. */
+.channel {
+  all: unset; box-sizing: border-box; cursor: default;
+  aspect-ratio: 392/217; border-radius: 28px; background: var(--tile);
+  border: 5px solid var(--tile-edge); box-shadow: inset 0 0 0 3px rgba(255,255,255,.28);
+  display: flex; flex-direction: column; justify-content: space-between; padding: 16px 18px;
+  position: relative; overflow: hidden; color: #fff;
+}
+.channel[data-p] { cursor: pointer; transition: transform .15s, border-color .15s; }
+.channel[data-p]:hover, .channel[data-p]:focus-visible { transform: scale(1.035); border-color: var(--wii); outline: none; }
+
+/* The three lines of text in a tile: kind (top), name (middle), tagline (bottom). */
+.channel .kind { font-family: var(--f-pixel); font-size: 9px; letter-spacing: 1px; text-transform: uppercase; opacity: .9; }
+.channel .name { font: 700 clamp(24px, 3.1vw, 40px)/1 var(--f-chunk); text-shadow: 0 2px 4px rgba(0,0,0,.4); overflow-wrap: anywhere; }
+.channel .sub { font-size: 13px; font-weight: 500; opacity: .92; }
+.channel.empty { color: var(--ink-soft); align-items: center; justify-content: center; font-size: 13px; }
+
+/* Compact layout (switched on by js/fit.js on short windows): hide empty rows. */
+.grid.compact .channel.spare { display: none; }
+
+/* ---------- Per-project colours ----------
+   Referenced by the colorClass field in js/data.js. Also used for the
+   cover art in the project modal. Add one here when adding a project. */
+.c-rootine { background: linear-gradient(135deg, #2e8b57, #1f6b5f); }
+.c-motive { background: #1f3345; }
+.c-motive .name { color: #d64a35; letter-spacing: 1px; }
+.c-clothing { background: linear-gradient(135deg, #ff7a59, #ff4554); }
+.c-story { background: linear-gradient(135deg, #6a5acd, #3d2f9c); }
+.c-hospital { background: linear-gradient(135deg, #2aa4c8, #1d6f9a); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 860px) {
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+}
+@media (max-width: 520px) {
+  .grid { grid-template-columns: 1fr; }
+  .channel.empty { display: none; }
+}

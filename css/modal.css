@@ -1,0 +1,108 @@
+/* ==========================================================================
+   modal.css: the project pop-up, styled like a Wii channel preview on a TV
+   --------------------------------------------------------------------------
+   Structure (built by js/modal.js):
+
+     .tvbox      dark blurred backdrop covering the page
+       .tvfit    box sized to the scaled-down TV
+         .tv     the TV screen itself (role="dialog")
+           .sheet   white SVG panel with a tab on top for the title
+           .ttl     project name (sits in the tab)
+           .art     screenshots, or a coloured cover if there are none
+           .txt     description, highlights, tech stack
+           .arr     previous / next arrows
+           .foot    striped bottom bar: Back, Live App, GitHub
+
+   Desktop: .tv is laid out at a fixed 1440×869 "design size" with every
+   child absolutely positioned, then shrunk with transform: scale() to fit
+   the window (js/modal.js works out the scale).
+
+   Small screens (.m class, added by js/modal.js under 820px wide): the
+   absolute positioning is switched off and it becomes a normal scrolling
+   full-screen page.
+   ========================================================================== */
+
+/* ---------- Backdrop ---------- */
+.tvbox { position: fixed; inset: 0; z-index: 20; background: rgba(5,7,10,.5); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; }
+.tvbox.on { display: flex; animation: fade .2s ease-out both; }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* Stops the page behind from scrolling while the modal is open. */
+body.locked { overflow: hidden; }
+
+.tvfit { position: relative; flex: none; filter: drop-shadow(0 12px 22px rgba(0,0,0,.4)); }
+
+/* ---------- TV screen (desktop) ----------
+   clip-path cuts the rectangle into the rounded, slightly bulging CRT shape. */
+.tv {
+  position: absolute; left: 0; top: 0; width: 1440px; height: 869px; transform-origin: 0 0;
+  background: linear-gradient(180deg, #37b5eb 0%, #ffffff 47.5%); overflow: hidden; color: #15171c; outline: none;
+  clip-path: path("M1376.33 52.2101C1389.63 66.1766 1398.06 84.8623 1400.14 104.998C1409.64 189.825 1415.04 327.908 1415.04 434.5C1415.04 541.092 1409.64 679.175 1400.14 764.003C1398.06 784.138 1389.63 802.823 1376.33 816.79C1363.03 830.756 1345.7 839.114 1327.38 840.4C1183.78 849.924 974.111 849.924 717.6 849.924C461.089 849.924 251.417 849.924 107.817 840.4C89.4993 839.114 72.1743 830.756 58.874 816.79C45.5737 802.823 37.1452 784.138 35.0633 764.003C25.5561 679.175 20.1601 541.254 20.1601 434.5C20.1601 327.746 25.5561 189.825 35.0633 104.998C37.1452 84.8623 45.5737 66.1766 58.874 52.2101C72.1743 38.2437 89.4993 29.8862 107.817 28.6C251.417 19.0756 461.089 19.0756 717.6 19.0756C974.111 19.0756 1183.78 19.0756 1327.38 28.6C1345.7 29.8862 1363.03 38.2437 1376.33 52.2101Z");
+}
+/* Every direct child is placed with left/top in pixels on the 1440×869 canvas. */
+.tv > * { position: absolute; }
+
+/* White panel. Its outline (with the title tab) is drawn by layoutTitleTab() in js/modal.js. */
+.tv .sheet { left: -5px; top: 39px; width: 1450px; height: 835px; max-width: none; }
+
+/* Title, in the tab. left and width are also set from JS to match the tab. */
+.tv .ttl { margin: 0; left: 1066px; top: 44px; width: 374px; height: 72px; white-space: nowrap; display: grid; place-items: center; color: #fff; font: 700 44px/1 var(--f-chunk); text-shadow: 0 1px 2px rgba(0,0,0,.25); padding: 0 56px 0 0; text-align: center; }
+.tv .ttl span { display: inline-block; }
+
+/* Left: artwork area */
+.tv .art { left: 108px; top: 150px; width: 636px; height: 470px; border-radius: 48px; background: #d9d9d9; box-shadow: inset 0 4px 15px rgba(0,0,0,.25); display: flex; align-items: center; justify-content: center; gap: 12px; padding: 36px 26px; }
+.tv .art img { height: auto; aspect-ratio: 200 / 392; max-height: 100%; width: calc((100% - 24px) / 3); min-width: 0; object-fit: cover; border-radius: 14px; display: block; }
+/* Cover shown when a project has no screenshots; ::before adds a glossy highlight on the top half. */
+.tv .cover { width: 100%; height: 100%; border-radius: 28px; display: grid; place-items: center; align-content: center; gap: 12px; position: relative; overflow: hidden; color: #fff; text-align: center; padding: 20px; }
+.tv .cover::before { content: ""; position: absolute; inset: 0 0 50% 0; background: linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,0)); }
+.tv .cover b { font: 700 52px/1 var(--f-chunk); text-shadow: 0 2px 4px rgba(0,0,0,.4); position: relative; overflow-wrap: anywhere; }
+.tv .cover i { font: 500 20px var(--f-body); font-style: normal; position: relative; opacity: .95; }
+
+/* Right: text */
+.tv .txt { left: 776px; top: 136px; width: 564px; height: 540px; display: flex; flex-direction: column; gap: 10px; justify-content: center; }
+.tv .txt .d { margin: 0; font: 400 21px/1.4 var(--f-body); }
+.tv .txt h3 { margin: 4px 0 0; font: 700 14px var(--f-chunk); letter-spacing: 1.4px; text-transform: uppercase; color: #1f86b8; }
+.tv .txt ul.hl { margin: 0; padding-left: 22px; display: grid; gap: 4px; font-size: 17px; line-height: 1.35; }
+.tv .txt .chips { gap: 6px; }
+/* Fixed light colours: the TV stays light even in dark theme. */
+.tv .txt .chips li { font-size: 14px; padding: 2px 11px; background: #e6ebf2; border-color: #c4cbd6; color: #15171c; }
+.tv .txt .stat { margin: 0; font-size: 15px; color: #626872; }
+
+/* Bottom bar, striped like the Wii menu footer */
+.tv .foot { left: 0; top: 686px; width: 1440px; height: 183px; background: repeating-linear-gradient(180deg, #d7d7d3 0 6px, #bdbdb8 6px 8px); border-top: 2px solid #1b1b1b; }
+.tv .foot .pill { position: absolute; top: 28px; width: 428px; height: 116px; font-size: 63px; border-width: 5px; border-radius: 70px; background: linear-gradient(180deg,#fff,#e3e8ef 65%); color: #919191; }
+.tv .foot .pill.a { left: 252px; }    /* Back */
+.tv .foot .pill.b { left: 760px; }    /* Live App */
+.tv .foot .pill.off { border-color: #b3b3b0; }
+.tv .foot .ib { position: absolute; left: 1290px; top: 46px; }
+
+/* Previous / next arrows */
+.tv .arr { top: 322px; width: 62px; height: 140px; background: none; border: 0; padding: 0; cursor: pointer; }
+.tv .arr svg { width: 100%; height: 100%; display: block; transition: transform .12s; }
+.tv .arr:hover svg, .tv .arr:focus-visible svg { transform: scale(1.12); }
+.tv .arr.prev { left: 18px; }
+.tv .arr.next { right: 22px; }
+
+/* ---------- Small screens: plain full-screen sheet ---------- */
+.tvfit.m { width: 100%; height: 100%; overflow: auto; }
+.tv.m { clip-path: none; position: relative; width: 100%; height: auto; transform: none; display: flex; flex-direction: column; border-radius: 0; min-height: 100%; }
+.tv.m > * { position: static; }                /* undo the absolute positioning */
+.tv.m .sheet, .tv.m .arr { display: none; }    /* no TV panel or arrows (use Back instead) */
+.tv.m .ttl { width: auto; height: auto; background: #37b5eb; font-size: 34px; padding: 22px 20px 16px; margin: 0; place-items: start; text-align: left; }
+.tv.m .art { width: auto; height: auto; margin: 16px; padding: 16px; border-radius: 34px; min-height: 220px; flex-wrap: nowrap; }
+.tv.m .art img { height: auto; width: 29%; min-width: 0; max-height: 280px; object-fit: cover; }
+.tv.m .cover { min-height: 200px; }
+.tv.m .txt { width: auto; height: auto; padding: 4px 20px 20px; overflow: visible; background: #fff; }
+.tv.m .foot { width: auto; height: auto; display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; align-items: center; padding: 18px 16px calc(18px + env(safe-area-inset-bottom, 0px)); margin-top: auto; }
+.tv.m .foot .pill { position: static; width: 210px; height: 70px; font-size: 30px; }
+.tv.m .foot .ib { position: relative; left: auto; top: auto; margin: 4px 8px; }
+
+/* Tablet and phone: footer buttons stick to the bottom and share one row. */
+@media (max-width: 860px) {
+  .tv.m { overflow: visible; }
+  .tv.m .txt .d { font-size: 18px; }
+  .tv.m .foot { position: sticky; bottom: 0; z-index: 3; flex-wrap: nowrap; gap: 10px; padding: 12px 12px calc(12px + env(safe-area-inset-bottom, 0px)); }
+  .tv.m .foot .pill { width: auto; flex: 1 1 0; min-width: 0; height: 56px; font-size: 21px; white-space: nowrap; padding: 0 8px; border-width: 4px; }
+  .tv.m .foot .ib { width: 56px; height: 56px; margin: 0; flex: none; border-width: 4px; }
+  .tv.m .foot .ib svg { width: 30px; height: 30px; }
+}
