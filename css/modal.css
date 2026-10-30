@@ -70,11 +70,11 @@ body.locked { overflow: hidden; }
 
 /* Bottom bar, striped like the Wii menu footer */
 .tv .foot { left: 0; top: 686px; width: 1440px; height: 183px; background: repeating-linear-gradient(180deg, #d7d7d3 0 6px, #bdbdb8 6px 8px); border-top: 2px solid #1b1b1b; }
-.tv .foot .pill { position: absolute; top: 28px; width: 428px; height: 116px; font-size: 63px; border-width: 5px; border-radius: 70px; background: linear-gradient(180deg,#fff,#e3e8ef 65%); color: #919191; }
+.tv .foot .pill { position: absolute; top: 20px; width: 428px; height: 116px; font-size: 63px; border-width: 5px; border-radius: 70px; background: linear-gradient(180deg,#fff,#e3e8ef 65%); color: #919191; }
 .tv .foot .pill.a { left: 252px; }    /* Back */
 .tv .foot .pill.b { left: 760px; }    /* Live App */
 .tv .foot .pill.off { border-color: #b3b3b0; }
-.tv .foot .ib { position: absolute; left: 1290px; top: 46px; }
+.tv .foot .ib { position: absolute; left: 1290px; top: 40px; }
 
 /* Previous / next arrows */
 .tv .arr { top: 322px; width: 62px; height: 140px; background: none; border: 0; padding: 0; cursor: pointer; }
