@@ -13,5 +13,5 @@ function tick() {
 /* Show the time now, then refresh it every 20 seconds. */
 export function startClock() {
   tick();
-  setInterval(tick, 10000);
+  setInterval(tick, 5000);
 }
