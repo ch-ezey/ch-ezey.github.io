@@ -8,7 +8,7 @@
 
 /* Skill groups, shown as cards under the About card (rendered by js/home.js). */
 export const SKILLS = [
-  { title: "Languages", items: ["Java", "JavaScript", "Python", "SQL"] },
+  { title: "Languages", items: ["Java", "JavaScript", "Python", "SQL", "HTML", "CSS"] },
   { title: "Frameworks", items: ["Spring Boot", "Hibernate/JPA", "React", "Node.js", "React Native"] },
   { title: "Cloud and DevOps", items: ["AWS", "Google Cloud", "Docker", "Kubernetes (learning)", "GitHub Actions", "GitLab CI"] },
   { title: "Data", items: ["MySQL", "MongoDB", "Firebase", "BigQuery", "Redis"] },
