@@ -35,12 +35,23 @@ function arrowSvg(flip) {
    start empty; layoutTitleTab() fills in their shape. */
 const SHEET_SVG = '<svg class="sheet" viewBox="0 0 1450 835" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="sg" gradientUnits="userSpaceOnUse" x1="0" y1="5" x2="0" y2="830"><stop offset="0" stop-opacity="0"/><stop offset=".4" stop-opacity="0"/><stop offset=".5" stop-opacity=".4"/><stop offset=".66" stop-opacity=".4"/></linearGradient></defs><path id="sh1" fill="#fff"/><path id="sh2" fill="url(#sg)" fill-opacity=".2"/><path id="sh3" fill="none" stroke="#8D8E8F" stroke-width="6" stroke-linejoin="round"/></svg>';
 
+/* A large screenshot with a row of clickable thumbnails (used when a project has a gallery). */
+function galleryHtml(shots) {
+  const thumbs = shots.map((s, i) =>
+    `<button type="button" class="gt${i ? "" : " on"}" data-shot="${s.src}" data-alt="${escapeHtml(s.alt)}" aria-label="${escapeHtml(s.alt)}"><img src="${s.src}" alt=""></button>`
+  ).join("");
+  return `<div class="gal"><div class="gmain"><img src="${shots[0].src}" alt="${escapeHtml(shots[0].alt)}" id="gmain"></div>` +
+         `<div class="gthumbs" role="group" aria-label="Screenshots">${thumbs}</div></div>`;
+}
+
 /* Fill the TV with one project's content. */
 function render(index) {
   const p = PROJECTS[index];
   currentIndex = index;
 
-  const art = p.screenshots
+  const art = p.gallery
+    ? galleryHtml(p.gallery)
+    : p.screenshots
     ? p.screenshots.map((s) => `<img src="${s.src}" alt="${escapeHtml(s.alt)}" width="200" height="392">`).join("")
     : `<div class="cover ${p.colorClass}"><b>${escapeHtml(p.name)}</b><i>${escapeHtml(p.tagline)}</i></div>`;
 
@@ -149,4 +160,14 @@ export function closeModal() {
 
 export function initModal() {
   window.addEventListener("resize", fitToWindow);
+
+  // Clicking a thumbnail swaps the large screenshot.
+  tv.addEventListener("click", (e) => {
+    const thumb = e.target.closest("[data-shot]");
+    if (!thumb) return;
+    const main = document.getElementById("gmain");
+    main.src = thumb.dataset.shot;
+    main.alt = thumb.dataset.alt;
+    tv.querySelectorAll(".gt").forEach((t) => t.classList.toggle("on", t === thumb));
+  });
 }

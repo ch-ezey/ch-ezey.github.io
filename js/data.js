@@ -25,7 +25,8 @@ export const SKILLS = [
    tagline     line at the bottom of the tile
    colorClass  tile/cover colour, defined in css/screens/projects.css
    repo        GitHub link
-   screenshots optional; shown in the modal instead of the coloured cover
+   screenshots optional; phone screenshots shown side by side instead of the coloured cover
+   gallery     optional; wide screenshots: one large image with clickable thumbnails
    description paragraph in the modal
    highlights  "What it does" bullet points
    stack       "Built with" chips
@@ -34,14 +35,23 @@ export const PROJECTS = [
   {
     id: "rootine", name: "Rootine", kind: "Web app", tagline: "AI-assisted routines", colorClass: "c-rootine",
     repo: "https://github.com/ch-ezey/rootine",
-    description: "An AI-assisted routine manager. Describe the routine you want, let AI turn it into a structured draft, then manage it with full create, edit, delete and reorder controls. Includes sign-up, login and task ordering.",
-    highlights: [
-      "Sign-up and login secured with Spring Security",
-      "Create, edit, delete and reorder routines and tasks",
-      "Generates and updates routines from natural-language prompts using the OpenAI API",
-      "Containerised with Docker; AWS deployment being explored"
+    gallery: [
+      { src: "assets/images/rootine-today.webp", alt: "Today view: the active routine on a live timeline" },
+      { src: "assets/images/rootine-create-ai.webp", alt: "New routine dialog with an AI prompt" },
+      { src: "assets/images/rootine-routine-detail.webp", alt: "Routine detail: drag to reorder, tick off, edit" },
+      { src: "assets/images/rootine-routines.webp", alt: "Your routines list" },
+      { src: "assets/images/rootine-landing.webp", alt: "Landing page" },
+      { src: "assets/images/rootine-today-dark.webp", alt: "Today view in the dark theme" },
+      { src: "assets/images/rootine-today-mobile.webp", alt: "Today view on mobile" }
     ],
-    stack: ["Java 17", "Spring Boot", "JPA", "Spring Security", "MySQL", "React", "Vite", "OpenAI API", "Docker"],
+    description: "Rootine is an AI-assisted routine manager. Describe the routine you want, let AI turn it into a structured draft, then shape every step yourself and follow it on a live timeline each day.",
+    highlights: [
+      "AI drafts the steps, start times, durations and priorities for you to review and edit",
+      "Create, edit, delete and drag-and-drop reorder routines and tasks",
+      "Today view with a live \"now\" marker, progress tracking and a New day reset",
+      "JWT-secured accounts, light and dark themes, responsive on desktop and mobile"
+    ],
+    stack: ["Java 17", "Spring Boot", "Spring Security", "JPA", "PostgreSQL", "React", "Vite", "Tailwind CSS", "OpenAI API"],
     status: "In progress, MVP stage"
   },
   {

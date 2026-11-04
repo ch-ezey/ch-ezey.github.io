@@ -106,3 +106,23 @@ body.locked { overflow: hidden; }
   .tv.m .foot .ib { width: 56px; height: 56px; margin: 0; flex: none; border-width: 4px; }
   .tv.m .foot .ib svg { width: 30px; height: 30px; }
 }
+
+/* ---------- Screenshot gallery (a project with `gallery` in js/data.js) ----------
+   One large image on top, a row of thumbnails underneath. */
+.tv .art:has(.gal) { padding: 22px 26px 18px; align-items: stretch; }
+.tv .gal { width: 100%; height: 100%; display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+.tv .gmain { position: relative; flex: 1; min-height: 0; border-radius: 14px; background: #fff; display: grid; place-items: center; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.25); }
+.tv .gmain img { position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; aspect-ratio: auto; object-fit: contain; border-radius: 0; display: block; }
+.tv .gthumbs { flex: none; display: flex; gap: 7px; justify-content: center; }
+.tv .gt { all: unset; box-sizing: border-box; cursor: pointer; width: 62px; height: 40px; border-radius: 8px; overflow: hidden; border: 3px solid transparent; background: #fff; opacity: .7; transition: transform .12s, opacity .12s, border-color .12s; }
+.tv .gt img { width: 100%; height: 100%; max-height: none; aspect-ratio: auto; object-fit: cover; object-position: top; border-radius: 0; display: block; }
+.tv .gt:hover { transform: scale(1.08); opacity: 1; }
+.tv .gt.on { border-color: #37b5eb; opacity: 1; }
+.tv .gt:focus-visible { outline: 3px solid #2f8fe6; outline-offset: 2px; }
+/* Phone layout: fixed-height main image, thumbnails wrap. The longer selectors beat `.tv.m .art img` above. */
+.tv.m .art:has(.gal) { height: auto; min-height: 0; padding: 14px; }
+.tv.m .gal { height: auto; }
+.tv.m .gmain { flex: none; height: 260px; }
+.tv.m .art .gmain img { width: 100%; height: 100%; max-height: none; min-width: 0; object-fit: contain; }
+.tv.m .art .gt img { width: 100%; height: 100%; min-width: 0; max-height: none; }
+.tv.m .gthumbs { flex-wrap: wrap; }
